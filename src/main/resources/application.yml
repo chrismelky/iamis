@@ -1,6 +1,6 @@
 spring:
   application:
-    name: authorization-service
+    name: authorization
 
   flyway:
     sql-migration-prefix:
@@ -14,16 +14,16 @@ spring:
     username: postgres
     password: p@ssw0rd
 
-#  cloud:
-#    refresh:
-#      enabled: false
-
-#    consul:
-#      host: localhost
-#      port: 8500
-#      discovery:
-#        enabled: true
-#        register: true
+  cloud:
+    refresh:
+      enabled: false
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        prefer-ip-address: true
+        enabled: true
+        register: true
 
 logging:
   level:
@@ -34,4 +34,4 @@ logging:
         web: DEBUG
 
 server:
-  port: 9000
+  port: 8081
