@@ -29,6 +29,10 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+    admin:
+      fail-fast: true
+    bootstrap-servers: localhost:9092
 
 logging:
   level:
