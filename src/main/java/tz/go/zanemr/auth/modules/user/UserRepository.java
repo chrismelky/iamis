@@ -1,7 +1,7 @@
 package tz.go.zanemr.auth.modules.user;
 
 import org.springframework.data.jpa.repository.EntityGraph;
-import tz.go.zanemr.auth.modules.core.BaseRepository;
+import tz.go.zanemr.auth.core.BaseRepository;
 
 import java.util.Optional;
 

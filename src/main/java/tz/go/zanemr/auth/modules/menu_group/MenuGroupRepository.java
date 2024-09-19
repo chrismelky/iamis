@@ -2,7 +2,7 @@ package tz.go.zanemr.auth.modules.menu_group;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tz.go.zanemr.auth.modules.core.BaseRepository;
+import tz.go.zanemr.auth.core.BaseRepository;
 
 import java.util.List;
 

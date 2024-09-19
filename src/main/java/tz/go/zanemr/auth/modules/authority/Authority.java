@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tz.go.zanemr.auth.modules.core.BaseModel;
+import tz.go.zanemr.auth.core.BaseModel;
 import tz.go.zanemr.auth.modules.menu_item.MenuItem;
 import tz.go.zanemr.auth.modules.role.Role;
 

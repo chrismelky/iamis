@@ -1,4 +1,4 @@
-package tz.go.zanemr.auth.modules.core;
+package tz.go.zanemr.auth.core;
 
 import tz.go.zanemr.auth.modules.menu_group.MenuGroup;
 import tz.go.zanemr.auth.modules.menu_item.MenuItem;

@@ -1,4 +1,4 @@
-package tz.go.zanemr.auth.modules.core;
+package tz.go.zanemr.auth.core;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

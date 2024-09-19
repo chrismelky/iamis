@@ -1,4 +1,4 @@
-package tz.go.zanemr.auth.modules.core;
+package tz.go.zanemr.auth.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;

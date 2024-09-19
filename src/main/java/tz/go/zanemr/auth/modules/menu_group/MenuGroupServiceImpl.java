@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import tz.go.zanemr.auth.modules.core.SearchService;
+import tz.go.zanemr.auth.core.SearchService;
 
 import java.util.Map;
 import java.util.UUID;

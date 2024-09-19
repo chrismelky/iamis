@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import tz.go.zanemr.auth.modules.core.BaseDto;
+import tz.go.zanemr.auth.core.BaseDto;
 
 import java.util.ArrayList;
 import java.util.List;

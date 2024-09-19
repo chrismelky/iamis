@@ -5,8 +5,8 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import tz.go.zanemr.auth.modules.core.AppConstants;
-import tz.go.zanemr.auth.modules.core.CustomApiResponse;
+import tz.go.zanemr.auth.core.AppConstants;
+import tz.go.zanemr.auth.core.CustomApiResponse;
 
 import java.util.Map;
 import java.util.UUID;

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tz.go.zanemr.auth.modules.authority.AuthorityRepository;
-import tz.go.zanemr.auth.modules.core.SearchService;
+import tz.go.zanemr.auth.core.SearchService;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupDto;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupMapper;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupRepository;

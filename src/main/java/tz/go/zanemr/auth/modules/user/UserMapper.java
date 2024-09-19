@@ -1,7 +1,7 @@
 package tz.go.zanemr.auth.modules.user;
 
 import org.mapstruct.*;
-import tz.go.zanemr.auth.modules.core.BaseModel;
+import tz.go.zanemr.auth.core.BaseModel;
 import tz.go.zanemr.auth.modules.role.Role;
 
 import java.util.List;

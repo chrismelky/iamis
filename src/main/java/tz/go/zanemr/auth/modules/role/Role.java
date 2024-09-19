@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import tz.go.zanemr.auth.modules.authority.Authority;
-import tz.go.zanemr.auth.modules.core.BaseModel;
+import tz.go.zanemr.auth.core.BaseModel;
 import tz.go.zanemr.auth.modules.user.User;
 
 import java.util.HashSet;

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
-import tz.go.zanemr.auth.modules.core.Utils;
+import tz.go.zanemr.auth.core.Utils;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupDto;
 import tz.go.zanemr.auth.modules.menu_item.MenuItem;
 import tz.go.zanemr.auth.modules.menu_item.MenuItemRepository;

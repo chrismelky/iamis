@@ -1,4 +1,4 @@
-package tz.go.zanemr.auth.modules.core;
+package tz.go.zanemr.auth.core;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
