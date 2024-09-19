@@ -166,7 +166,7 @@ public class SecurityConfiguration {
                 .scope(OidcScopes.PROFILE)
                 .clientSettings(ClientSettings.builder().requireProofKey(true).requireAuthorizationConsent(false).build())
                 .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofSeconds(60))
+                        .accessTokenTimeToLive(Duration.ofSeconds(1000))
                         .build())
                 .build();
 

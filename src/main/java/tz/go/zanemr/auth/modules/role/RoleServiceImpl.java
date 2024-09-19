@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.role;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
@@ -22,8 +24,17 @@ public class RoleServiceImpl implements RoleService {
     private final AuthorityRepository authorityRepository;
 
     @Override
-    public RoleDto save(RoleDto entity) {
-        return null;
+    public RoleDto save(RoleDto roleDto) {
+        Role role;
+        if (roleDto.getUuid() != null) {
+            role = roleRepository.findByUuid(roleDto.getUuid())
+                    .orElseThrow(() -> new ValidationException("Role not found"));
+        } else {
+            role= new Role();
+        }
+        role = roleMapper.partialUpdate(roleDto, role);
+        role = roleRepository.save(role);
+        return roleMapper.toDto(role);
     }
 
     @Override

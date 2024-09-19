@@ -40,6 +40,8 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
                     .orElseThrow(() -> new ValidationException("Cannot find menu item with uuid " + dto.getUuid()));
             menuItem = menuItemMapper.partialUpdate(dto, menuItem);
             menuItem.setAuthorities(new HashSet<>());
+        } else {
+            menuItem.setUuid(UUID.randomUUID());
         }
         if (dto.getAuthorityIds() != null) {
             for (UUID authorityId : dto.getAuthorityIds()) {

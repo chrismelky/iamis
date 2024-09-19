@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import tz.go.zanemr.auth.modules.core.BaseDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +18,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItemDto implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class MenuItemDto extends BaseDto implements Serializable {
 
     private Long id;
     private UUID uuid;
