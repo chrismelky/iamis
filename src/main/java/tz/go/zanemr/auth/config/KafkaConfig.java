@@ -13,7 +13,6 @@ import org.springframework.kafka.support.converter.RecordMessageConverter;
 @EnableKafka
 public class KafkaConfig {
 
-
     @Bean
     public NewTopic topic() {
         log.info("***************Creating new topic for topic");
