@@ -12,6 +12,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * Entity representing a Role in the system. A Role can be assigned to multiple users
+ * and can have multiple authorities. This class maps to the 'roles' table in the database.
+ * <p>
+ * - Role-to-User: Many-to-Many relationship
+ * - Role-to-Authority: Many-to-Many relationship
+ * <p>
+ * Inherits from {@link BaseModel}, which includes common auditing fields like 'id', 'createdAt', etc.
+ */
 @Getter
 @Setter
 @Entity

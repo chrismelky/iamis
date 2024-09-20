@@ -33,7 +33,17 @@ spring:
     admin:
       fail-fast: true
     bootstrap-servers: localhost:9092
-
+  task:
+    execution:
+      thread-name-prefix: zanemr-task
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: zanemr-scheduling
+      pool:
+        size: 10
 logging:
   level:
     org:

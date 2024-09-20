@@ -19,7 +19,7 @@ public class SearchService<T> {
         boolean isOr = search.containsKey("searchType") && search.get("searchType").equals("or");
 
         List<String> allowedProps =
-                Arrays.stream(entity.getDeclaredFields()).map(Field::getName).collect(Collectors.toList());
+                Arrays.stream(entity.getDeclaredFields()).map(Field::getName).toList();
         if (!search.isEmpty()) {
             for (String key : search.keySet()) {
                 if (allowedProps.contains(key) && !search.get(key).toString().isEmpty()) {

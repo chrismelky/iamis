@@ -60,4 +60,5 @@ public abstract class BaseModel implements Serializable {
     @JsonIgnore
     @Transient
     private String removedBy;
+
 }

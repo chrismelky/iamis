@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tz.go.zanemr.auth.core.SearchService;
+import tz.go.zanemr.auth.core.Utils;
 
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,8 @@ public class MenuGroupServiceImpl extends SearchService<MenuGroup> implements Me
             menuGroup = menuGroupRepository.findByUuid(dto.getUuid())
                     .orElseThrow(() -> new RuntimeException("Menu group not found"));
             menuGroup = menuGroupMapper.partialUpdate(dto, menuGroup);
+        } else {
+            menuGroup.setUuid(Utils.generateUuid());
         }
         menuGroup = menuGroupRepository.save(menuGroup);
         return menuGroupMapper.toDto(menuGroup);

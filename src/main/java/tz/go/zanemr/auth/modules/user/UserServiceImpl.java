@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tz.go.zanemr.auth.core.SearchService;
+import tz.go.zanemr.auth.core.Utils;
 import tz.go.zanemr.auth.modules.role.RoleRepository;
 
 import java.util.HashSet;
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends SearchService<User> implements UserService {
 
     private final UserRepository userRepository;
 
@@ -30,18 +32,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto dto) {
-        User user;
-        if(dto.uuid() != null) {
-            user = userRepository.findById(dto.id())
+        User user = userMapper.toEntity(dto);
+        if(dto.getUuid() != null) {
+            user = userRepository.findByUuid(dto.getUuid())
                     .orElseThrow(
-                            ()-> new ValidationException("User with id " + dto.uuid() + " not found"));
+                            ()-> new ValidationException("User with id " + dto.getUuid() + " not found"));
             user = userMapper.partialUpdate(dto, user);
             user.setRoles(new HashSet<>());
         } else {
-            user = userMapper.toEntity(dto);
+            user.setUuid(Utils.generateUuid());
             user.setPassword(passwordEncoder.encode(defaultPassword));
         }
-        for (UUID roleId : dto.roleIds()) {
+        for (UUID roleId : dto.getRoleIds()) {
             user.addRole(roleRepository.getReferenceByUuid(roleId));
         }
         user = userRepository.save(user);
@@ -49,17 +51,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDto> findAll(Pageable pageable, Map<String, Object> search) {
-        return null;
+    public Page<UserDto> findAll(Pageable pageable, Map<String, Object> searchParams) {
+        return userRepository.findAll(createSpecification(User.class, searchParams),pageable)
+                .map(userMapper::toDto);
     }
 
     @Override
     public UserDto findById(UUID uuid) {
-        return null;
+        return userRepository.findByUuid(uuid).map(userMapper::toDto).orElseThrow(
+                ()-> new ValidationException("User with id " + uuid + " not found")
+        );
     }
 
     @Override
     public void delete(UUID uuid) {
-
+        try {
+            userRepository.deleteByUuid(uuid);
+        }catch (Exception e) {
+            throw new ValidationException("Cannot delete user with id " + uuid);
+        }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
 import tz.go.zanemr.auth.core.Utils;
+import tz.go.zanemr.auth.modules.menu_group.MenuGroup;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupDto;
 import tz.go.zanemr.auth.modules.menu_item.MenuItem;
 import tz.go.zanemr.auth.modules.menu_item.MenuItemRepository;
@@ -66,7 +67,7 @@ public class OidcUserInfoService   {
         log.info(
                 "menu items with no group founds {} ",
                 menuItems2.stream().map(MenuItem::getName).collect(Collectors.toSet()));
-        Map<String, List<Long>> groupItemIds = Utils.getMenuGroup(menuItems);
+        Map<String, List<Long>> groupItemIds = getMenuGroup(menuItems);
         log.info("group and iterm ids {} ", groupItemIds);
 
         List<MenuGroupDto> itemAsGroup =
@@ -90,5 +91,30 @@ public class OidcUserInfoService   {
 
         return itemAsGroup;
     }
+
+    public  Map<String, List<Long>> getMenuGroup(Set<MenuItem> menuItems) {
+
+        Map<String, List<Long>> groupItemIds = new HashMap<>();
+        List<Long> menuGroupIds = new ArrayList<>();
+        List<Long> menuItemsIds = new ArrayList<>();
+        menuGroupIds.add(0L);
+        menuItemsIds.add(0L);
+
+        menuItems.forEach(
+                m -> {
+                    menuItemsIds.add(m.getId());
+                    if (m.getMenuGroup() != null) {
+                        getGroup(m.getMenuGroup(), menuGroupIds);
+                    }
+                });
+        groupItemIds.put("groupIds", menuGroupIds);
+        groupItemIds.put("itemIds", menuItemsIds);
+        return groupItemIds;
+    }
+
+    private  void getGroup(MenuGroup group, List<Long> collect) {
+        collect.add(group.getId());
+    }
+
 }
 

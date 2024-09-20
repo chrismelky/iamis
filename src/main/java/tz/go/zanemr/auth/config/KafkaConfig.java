@@ -8,15 +8,18 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
 
+import java.util.List;
+
 @Slf4j
-@Configuration
 @EnableKafka
+@Configuration
 public class KafkaConfig {
 
     @Bean
-    public NewTopic topic() {
-        log.info("***************Creating new topic for topic");
-        return new NewTopic("authority.create", 3, (short) 1);
+    public List<NewTopic> topics() {
+        log.info("Creating topic for topic if not exist");
+        return List.of(
+                new NewTopic("authority.create", 1, (short) 1));
     }
 
     @Bean

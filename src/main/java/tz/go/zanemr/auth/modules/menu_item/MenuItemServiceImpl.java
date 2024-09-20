@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tz.go.zanemr.auth.core.Utils;
 import tz.go.zanemr.auth.modules.authority.AuthorityRepository;
 import tz.go.zanemr.auth.core.SearchService;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupDto;
@@ -41,7 +42,7 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
             menuItem = menuItemMapper.partialUpdate(dto, menuItem);
             menuItem.setAuthorities(new HashSet<>());
         } else {
-            menuItem.setUuid(UUID.randomUUID());
+            menuItem.setUuid(Utils.generateUuid());
         }
         if (dto.getAuthorityIds() != null) {
             for (UUID authorityId : dto.getAuthorityIds()) {
