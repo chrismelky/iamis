@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.role;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class RoleServiceImpl extends SearchService<Role> implements RoleService 
         // If the role has a UUID, fetch the existing role and perform an update
         if (roleDto.getUuid() != null) {
             role = roleRepository.findByUuid(roleDto.getUuid())
-                    .orElseThrow(() -> new ValidationException("Role not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Role not found"));
 
             // Partially update the existing role with new data from the DTO
             role = roleMapper.partialUpdate(roleDto, role);
@@ -88,7 +89,7 @@ public class RoleServiceImpl extends SearchService<Role> implements RoleService 
     public RoleDto findById(UUID uuid) {
         return roleRepository.findByUuid(uuid)
                 .map(roleMapper::toDto)
-                .orElseThrow(() -> new ValidationException("Role not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Role not found"));
     }
 
     /**
@@ -116,7 +117,7 @@ public class RoleServiceImpl extends SearchService<Role> implements RoleService 
     @Override
     public RoleDto assignAuthorities(RoleAuthorities roleAuthorities) {
         Role role = roleRepository.findByUuid(roleAuthorities.getRoleId())
-                .orElseThrow(() -> new ValidationException("Role not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Role not found"));
         role.setAuthorities(new HashSet<>());
         for (Long authId : roleAuthorities.getAuthorityIds()) {
             role.addAuthority(authorityRepository.getReferenceById(authId));

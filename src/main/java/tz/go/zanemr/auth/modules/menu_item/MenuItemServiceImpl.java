@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.menu_item;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
         MenuItem menuItem = menuItemMapper.toEntity(dto);
         if (dto.getUuid() != null) {
             menuItem = menuItemRepository.findByUuid(dto.getUuid())
-                    .orElseThrow(() -> new ValidationException("Cannot find menu item with uuid " + dto.getUuid()));
+                    .orElseThrow(() -> new EntityNotFoundException("Cannot find menu item with uuid " + dto.getUuid()));
             menuItem = menuItemMapper.partialUpdate(dto, menuItem);
             menuItem.setAuthorities(new HashSet<>());
         } else {
@@ -64,7 +65,7 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
     public MenuItemDto findById(UUID uuid) {
         return menuItemRepository.findByUuid(uuid)
                 .map(menuItemMapper::toDto)
-                .orElseThrow(() -> new ValidationException("Cannot find menu item with uuid " + uuid));
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find menu item with uuid " + uuid));
     }
 
     @Override

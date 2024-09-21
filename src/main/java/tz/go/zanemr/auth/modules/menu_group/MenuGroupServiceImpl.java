@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.menu_group;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class MenuGroupServiceImpl extends SearchService<MenuGroup> implements Me
         MenuGroup menuGroup = menuGroupMapper.toEntity(dto);
         if (dto.getUuid() != null) {
             menuGroup = menuGroupRepository.findByUuid(dto.getUuid())
-                    .orElseThrow(() -> new RuntimeException("Menu group not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Menu group not found"));
             menuGroup = menuGroupMapper.partialUpdate(dto, menuGroup);
         } else {
             menuGroup.setUuid(Utils.generateUuid());
@@ -46,7 +47,7 @@ public class MenuGroupServiceImpl extends SearchService<MenuGroup> implements Me
     @Override
     public MenuGroupDto findById(UUID uuid) {
         return menuGroupRepository.findByUuid(uuid).map(menuGroupMapper::toDto)
-                .orElseThrow(() -> new ValidationException("Menu group not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Menu group not found"));
     }
 
     @Override

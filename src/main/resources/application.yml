@@ -48,8 +48,8 @@ logging:
   level:
     org:
       springframework:
-        security: INFO
-        security.oauth2: INFO
+        security: DEBUG
+        security.oauth2: DEBUG
         web: INFO
 
 server:

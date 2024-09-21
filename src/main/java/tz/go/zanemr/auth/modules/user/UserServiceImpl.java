@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.user;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +37,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
         if(dto.getUuid() != null) {
             user = userRepository.findByUuid(dto.getUuid())
                     .orElseThrow(
-                            ()-> new ValidationException("User with id " + dto.getUuid() + " not found"));
+                            ()-> new EntityNotFoundException("User with id " + dto.getUuid() + " not found"));
             user = userMapper.partialUpdate(dto, user);
             user.setRoles(new HashSet<>());
         } else {
@@ -59,7 +60,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
     @Override
     public UserDto findById(UUID uuid) {
         return userRepository.findByUuid(uuid).map(userMapper::toDto).orElseThrow(
-                ()-> new ValidationException("User with id " + uuid + " not found")
+                ()-> new EntityNotFoundException("User with id " + uuid + " not found")
         );
     }
 

@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Mapper interface for converting between {@link Role} entities and {@link RoleDto} objects.
+ * This interface uses MapStruct to automatically generate the mapping code at compile time.
+ * It defines methods for full entity-to-DTO conversion, partial updates, and custom mappings.
+ *
+ * The component model is set to Spring, allowing it to be used as a Spring bean.
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface RoleMapper {

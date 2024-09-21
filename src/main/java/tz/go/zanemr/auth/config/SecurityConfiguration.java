@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -50,6 +51,7 @@ import java.time.Duration;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -73,7 +75,7 @@ public class SecurityConfiguration {
 
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(oidc ->oidc.userInfoEndpoint(
+                .oidc(oidc -> oidc.userInfoEndpoint(
                         i -> i.userInfoMapper(userInfoMapper)
                 ));
 
@@ -86,11 +88,14 @@ public class SecurityConfiguration {
                 )
                 // Redirect to the login page when not authenticated from the
                 // authorization endpoint
-                .exceptionHandling((exceptions) -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                        )
+                .exceptionHandling((exceptions) -> {
+                            log.info(exceptions.toString());
+                            exceptions
+                                    .defaultAuthenticationEntryPointFor(
+                                            new LoginUrlAuthenticationEntryPoint("/login"),
+                                            new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                                    );
+                        }
                 )
                 .userDetailsService(userDetailsService);
 
@@ -133,15 +138,13 @@ public class SecurityConfiguration {
                 .oauth2ResourceServer(
                         (resourceServer) -> resourceServer
                                 .jwt(Customizer.withDefaults())
-                )
-                .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setHeader("Content-Type", "application/json; charset=utf-8");
-                            response.getWriter().write("{\"message\":\"UnAuthorized\"}");
-                            response.getWriter().flush();
-                        })
-
+                                .authenticationEntryPoint(
+                                        (request, response, authException) -> {
+                                            response.setHeader("Content-Type", "application/json; charset=utf-8");
+                                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                            response.getWriter().write("{\"message\": \"Unauthorized\"}");
+                                        }
+                                )
                 );
 
         return http.build();

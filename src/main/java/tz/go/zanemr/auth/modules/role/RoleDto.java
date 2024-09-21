@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * DTO for {@link Role}
+ * Data Transfer Object (DTO) for the {@link Role} entity.
+ * This class is used to transfer role data between the client and server.
+ * It extends {@link BaseDto}, which provides common fields like id, uuid.
  */
 @Data
 @AllArgsConstructor
@@ -25,4 +27,5 @@ public class RoleDto extends BaseDto {
     private String name;
     private String code;
     private List<UUID> authorityIds = new ArrayList<>();
+
 }
