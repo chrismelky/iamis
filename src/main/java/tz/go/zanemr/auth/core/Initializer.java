@@ -49,19 +49,10 @@ public class Initializer implements ApplicationRunner {
                                         resourceName =
                                                 resourceName.substring(0, 1).toUpperCase() + resourceName.substring(1);
                                         String actionName = handlerMethod.getMethod().getName();
-
-                                        String actionDisplayName = Utils.splitCamelCase(actionName);
                                         String authName = resourceName.toUpperCase().concat("_").concat(actionName.toUpperCase());
-                                        actionDisplayName =
-                                                actionDisplayName.substring(0, 1).toUpperCase()
-                                                        + actionDisplayName.substring(1);
-
-                                        Authority authority = new Authority();
-                                        authority.setName(authName);
-                                        authority.setDescription(resourceName.concat(" ").concat(actionDisplayName));
 
                                         try {
-                                            kafkaTemplate.send("authority.create", authority);
+                                            kafkaTemplate.send("authority.create", authName);
                                             logger.info("**************Published authority {} to kafka", authName);
                                         } catch (Exception e) {
                                             logger.error(e.getMessage());

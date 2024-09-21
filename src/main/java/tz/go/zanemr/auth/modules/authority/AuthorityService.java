@@ -15,10 +15,13 @@ public class AuthorityService {
     private final AuthorityRepository authorityRepository;
 
     @KafkaListener(id = "authServer", topics = {"authority.create"})
-    public void consume(Authority authority) {
+    public void consume(String newAuthorityName) {
 
-        if(!authorityRepository.existsByName(authority.getName())) {
+        if(!authorityRepository.existsByName(newAuthorityName)) {
+            Authority authority = new Authority();
             authority.setUuid(UUID.randomUUID());
+            authority.setName(newAuthorityName);
+            authority.setDescription(newAuthorityName);
             authorityRepository.save(authority);
             log.info("***** Created authority: {}", authority.getUuid());
         }

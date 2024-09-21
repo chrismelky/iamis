@@ -17,7 +17,7 @@ public class KafkaConfig {
 
     @Bean
     public List<NewTopic> topics() {
-        log.info("Creating topic for topic if not exist");
+        log.info("Creating topics for topic if not exist");
         return List.of(
                 new NewTopic("authority.create", 1, (short) 1));
     }
