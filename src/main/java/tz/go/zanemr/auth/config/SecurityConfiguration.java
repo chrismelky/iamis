@@ -143,6 +143,7 @@ public class SecurityConfiguration {
                                             response.setHeader("Content-Type", "application/json; charset=utf-8");
                                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                             response.getWriter().write("{\"message\": \"Unauthorized\"}");
+                                            response.getWriter().flush();
                                         }
                                 )
                 );

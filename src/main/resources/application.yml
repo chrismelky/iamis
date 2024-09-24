@@ -1,6 +1,30 @@
+#This service configuration
+service-name: authorization
+service-port: 8081
+
+#Database service configuration
+db-server: localhost
+db-port: 5432
+db-name: zanemr_authorization
+db-username: postgres
+db-password: p@ssw0rd
+
+#Consul service Discovery configuration
+consul-server: localhost
+consul-port: 8500
+
+#Kafka service configuration
+kafka-server: localhost
+kafka-port: 9092
+
 spring:
   application:
-    name: authorization
+    name: ${service-name}
+
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: http://localhost:8081
 
   flyway:
     sql-migration-prefix:
@@ -10,18 +34,18 @@ spring:
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/zanemr_authorization
-    username: postgres
-    password: p@ssw0rd
+    url: jdbc:postgresql://${db-server}:${db-port}/${db-name}
+    username: ${db-username}
+    password: ${db-password}
 
   cloud:
     refresh:
       enabled: false
     consul:
-      host: localhost
-      port: 8500
+      host: ${consul-server}
+      port: ${consul-port}
       discovery:
-        prefer-ip-address: true
+        prefer-ip-address: false
         enabled: true
         register: true
   kafka:
@@ -32,18 +56,19 @@ spring:
       auto-offset-reset: earliest
     admin:
       fail-fast: true
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${kafka-server}:${kafka-port}
   task:
     execution:
-      thread-name-prefix: zanemr-task
+      thread-name-prefix: ${service-name}-task
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: zanemr-scheduling
+      thread-name-prefix: ${service-name}-scheduling
       pool:
         size: 10
+
 logging:
   level:
     org:
@@ -53,4 +78,5 @@ logging:
         web: INFO
 
 server:
-  port: 8081
+  port: ${service-port}
+
