@@ -11,11 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -35,7 +40,9 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -92,7 +99,7 @@ public class SecurityConfiguration {
                             log.info(exceptions.toString());
                             exceptions
                                     .defaultAuthenticationEntryPointFor(
-                                            new LoginUrlAuthenticationEntryPoint("/login"),
+                                            new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"),
                                             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                                     );
                         }
@@ -110,14 +117,39 @@ public class SecurityConfiguration {
         http
                 .securityMatcher("/login", "/logout", "/oauth2/**", "/userinfo")
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests((authorize) -> authorize
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(form ->
+                        form.loginPage("http://localhost:4200/login")
+                                .loginProcessingUrl("/login")
+                                .successHandler((req, res, auth) -> { //actions when authentication succeeds
+                                    res.resetBuffer();
+                                    res.setStatus(HttpStatus.OK.value());
+                                    res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                                    var savedReq = new HttpSessionRequestCache().getRequest(req, res);
+                                    res.getWriter()
+                                            .append("{\"redirectUrl\": \"")
+                                            .append(savedReq == null ? "" : savedReq.getRedirectUrl())
+                                            .append("\"}");
+                                    res.flushBuffer();
+                                })
+                                .failureHandler( //and when it fails
+                                        (req, res, ex) -> res.setStatus(HttpStatus.UNAUTHORIZED.value())
+                                )
+
+                ).logout(logout -> logout
+                        .logoutSuccessUrl("http://localhost:4200/login") //target page after logout
+                ).exceptionHandling(handler -> handler
+                        .authenticationEntryPoint(
+                                new HttpStatusEntryPoint(HttpStatus.FORBIDDEN)
+                        )
+                ).authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll() // Allow CORS preflight
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
 
-                ).formLogin(Customizer.withDefaults());
+                );
 
         return http.build();
     }
@@ -165,9 +197,10 @@ public class SecurityConfiguration {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:4200")
-                .postLogoutRedirectUri("http://localhost:4200")
+                .postLogoutRedirectUri("http://localhost:4200/login")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
+                .scope("offline_access")
                 .clientSettings(ClientSettings.builder().requireProofKey(true).requireAuthorizationConsent(false).build())
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofSeconds(1000))
