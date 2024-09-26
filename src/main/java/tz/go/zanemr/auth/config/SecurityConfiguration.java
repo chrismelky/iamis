@@ -117,7 +117,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
 
-                ).formLogin(Customizer.withDefaults());
+                ).formLogin(
+                        loginForm ->loginForm.loginPage("/login")
+                                .loginProcessingUrl("/login"));
 
         return http.build();
     }
@@ -164,11 +166,15 @@ public class SecurityConfiguration {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:4200")
+                .redirectUri("http://localhost:4200/auth-callback")
                 .postLogoutRedirectUri("http://localhost:4200")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .clientSettings(ClientSettings.builder().requireProofKey(true).requireAuthorizationConsent(false).build())
+                .scope("offline_access")
+                .clientSettings(ClientSettings.builder()
+                        .requireProofKey(true)
+                        .requireAuthorizationConsent(false)
+                        .build())
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofSeconds(1000))
                         .build())
