@@ -26,7 +26,7 @@ echo "Starting with profile: $PROFILE"
 
 # Step 1: Build the application using Gradle
 echo "Running Gradle buildImage..."
-#./gradlew clean bootJar
+./gradlew clean bootJar -Dspring.profiles.active="$PROFILE"
 
 if [ $? -ne 0 ]; then
   echo "Gradle buildImage failed!"
