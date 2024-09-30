@@ -3,10 +3,10 @@ service-name: authorization
 service-port: 8081
 
 #Database service configuration
-db-server: 192.168.1.178
+db-server: zanemr-auth-service-db
 db-port: 5432
 db-name: zanemr_authorization
-db-username: postgres
+db-username: zanemr
 db-password: p@ssw0rd
 
 #Consul service Discovery configuration
@@ -14,7 +14,7 @@ consul-server: http://192.168.1.178
 consul-port: 8500
 
 #Kafka service configuration
-kafka-server: kafka-prod
+kafka-server: 192.168.1.178
 kafka-port: 9092
 
 spring:
