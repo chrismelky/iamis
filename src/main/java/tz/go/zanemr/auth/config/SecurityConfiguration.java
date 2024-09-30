@@ -8,6 +8,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -56,6 +57,9 @@ import java.util.function.Function;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+
+    @Value("${web-client-url:http://localhost:4200}")
+    private String webClientUrl;
 
     private final CustomUserDetailsService userDetailsService;
 
@@ -166,8 +170,8 @@ public class SecurityConfiguration {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:4200/auth-callback")
-                .postLogoutRedirectUri("http://localhost:4200")
+                .redirectUri(webClientUrl +"/auth-callback")
+                .postLogoutRedirectUri(webClientUrl)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .scope("offline_access")
@@ -225,7 +229,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin(webClientUrl);
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;

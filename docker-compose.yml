@@ -1,0 +1,20 @@
+services:
+  zanemr-auth-service:
+    image: zanemr-auth-service
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./src/main/resources/config:/config
+    networks:
+      - zanemr
+    command: ["java", "-jar", "app.jar", "--spring.config.location=/config/application-${SPRING_PROFILES_ACTIVE}.yml"]
+
+networks:
+  zanemr:
+    external: true

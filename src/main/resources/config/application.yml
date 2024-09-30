@@ -1,0 +1,41 @@
+#This service configuration
+service-name: authorization
+
+spring:
+  application:
+    name: ${service-name}
+
+  flyway:
+    sql-migration-prefix:
+    table: migrations
+    out-of-order: true
+    validate-on-migrate: true
+
+  cloud:
+    refresh:
+      enabled: false
+    consul:
+      discovery:
+        prefer-ip-address: false
+        enabled: true
+        register: true
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+    admin:
+      fail-fast: true
+  task:
+    execution:
+      thread-name-prefix: ${service-name}-task
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: ${service-name}-scheduling
+      pool:
+        size: 10
+

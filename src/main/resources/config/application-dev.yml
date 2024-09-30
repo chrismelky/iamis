@@ -1,0 +1,62 @@
+#front end web client url
+web-client-url: http://localhost:4200
+#This service configuration
+service-port: 8081
+
+#Database service configuration
+db-server: localhost
+db-port: 5432
+db-name: zanemr_authorization
+db-username: postgres
+db-password: p@ssw0rd
+
+#Consul service Discovery configuration
+consul-server: localhost
+consul-port: 8500
+
+#Kafka service configuration
+kafka-server: localhost
+kafka-port: 9092
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${db-server}:${db-port}/${db-name}
+    username: ${db-username}
+    password: ${db-password}
+
+  cloud:
+    refresh:
+      enabled: false
+    consul:
+      host: ${consul-server}
+      port: ${consul-port}
+      discovery:
+        prefer-ip-address: false
+        enabled: true
+        register: true
+  kafka:
+    bootstrap-servers: ${kafka-server}:${kafka-port}
+  task:
+    execution:
+      thread-name-prefix: ${service-name}-task
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: ${service-name}-scheduling
+      pool:
+        size: 10
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        security.oauth2: DEBUG
+        web: INFO
+
+server:
+  port: ${service-port}
+
