@@ -10,11 +10,11 @@ db-username: zanemr
 db-password: p@ssw0rd
 
 #Consul service Discovery configuration
-consul-server: http://192.168.1.178
+consul-server: 102.223.7.208
 consul-port: 8500
 
 #Kafka service configuration
-kafka-server: 192.168.1.178
+kafka-server: 102.223.7.208
 kafka-port: 9092
 
 spring:
