@@ -16,7 +16,7 @@ spring:
       enabled: false
     consul:
       discovery:
-        prefer-ip-address: false
+        prefer-ip-address: true
         enabled: true
         register: true
   kafka:
