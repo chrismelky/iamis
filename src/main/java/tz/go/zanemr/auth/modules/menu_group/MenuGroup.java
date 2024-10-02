@@ -20,9 +20,6 @@ public class MenuGroup extends BaseModel {
     @NotNull
     private String name;
 
-    @NotNull
-    private String module;
-
     private String icon;
 
     @NotNull

@@ -23,7 +23,6 @@ public final class MenuGroupDto implements Serializable {
     private  Long id;
     private  UUID uuid;
     private  @NotNull String name;
-    private  @NotNull String module;
     private  String state;
     private  String icon;
     private  @NotNull Integer sortOrder;
