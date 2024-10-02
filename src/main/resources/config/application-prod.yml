@@ -1,5 +1,5 @@
 #This service configuration
-service-name: authorization
+service-name: auth
 service-port: 8081
 
 #Database service configuration
