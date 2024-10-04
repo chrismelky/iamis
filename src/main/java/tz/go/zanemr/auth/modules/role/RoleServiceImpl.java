@@ -110,17 +110,17 @@ public class RoleServiceImpl extends SearchService<Role> implements RoleService 
     /**
      * Assigns a set of authorities to a role.
      *
-     * @param roleAuthorities the {@link RoleAuthorities} containing the role ID and authority IDs.
+     * @param roleAuthoritiesDto the {@link RoleAuthoritiesDto} containing the role ID and authority IDs.
      * @return the updated {@link RoleDto} after authorities have been assigned.
      * @throws ValidationException if the role is not found or validation fails.
      */
     @Override
-    public RoleDto assignAuthorities(RoleAuthorities roleAuthorities) {
-        Role role = roleRepository.findByUuid(roleAuthorities.getRoleId())
+    public RoleDto assignAuthorities(RoleAuthoritiesDto roleAuthoritiesDto) {
+        Role role = roleRepository.findByUuid(roleAuthoritiesDto.getRoleId())
                 .orElseThrow(() -> new EntityNotFoundException("Role not found"));
         role.setAuthorities(new HashSet<>());
-        for (Long authId : roleAuthorities.getAuthorityIds()) {
-            role.addAuthority(authorityRepository.getReferenceById(authId));
+        for (UUID authId : roleAuthoritiesDto.getAuthorityIds()) {
+            role.addAuthority(authorityRepository.getReferenceByUuid(authId));
         }
         roleRepository.save(role);
         return roleMapper.toDto(role);

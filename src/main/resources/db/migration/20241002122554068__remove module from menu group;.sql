@@ -1,1 +1,0 @@
-ALTER table menu_groups drop column module;

@@ -4,6 +4,6 @@ import tz.go.zanemr.auth.core.BaseCrudService;
 
 public interface RoleService extends BaseCrudService<RoleDto, Role> {
 
-    RoleDto assignAuthorities(RoleAuthorities roleAuthorities);
+    RoleDto assignAuthorities(RoleAuthoritiesDto roleAuthoritiesDto);
 
 }

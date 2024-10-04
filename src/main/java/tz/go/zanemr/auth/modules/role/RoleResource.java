@@ -40,7 +40,7 @@ public class RoleResource {
      */
     @PostMapping
     public CustomApiResponse create(@Valid @RequestBody RoleDto dto) {
-        if (dto.getId() != null || dto.getName() != null) {
+        if (dto.getId() != null || dto.getUuid() != null) {
             throw new ValidationException("New role should not have an id or uuid");
         }
         return CustomApiResponse.ok(roleService.save(dto));
@@ -106,12 +106,12 @@ public class RoleResource {
     /**
      * Assigns authorities to a role.
      *
-     * @param roleAuthorities the {@link RoleAuthorities} object containing the role and authority data.
+     * @param roleAuthoritiesDto the {@link RoleAuthoritiesDto} object containing the role and authority data.
      * @return {@link CustomApiResponse} containing the ID of the role and confirmation of assignment.
      */
     @PostMapping("/assign-authorities")
-    public CustomApiResponse assignAuthorities(@Valid RoleAuthorities roleAuthorities) {
-        RoleDto dto = roleService.assignAuthorities(roleAuthorities);
+    public CustomApiResponse assignAuthorities(@Valid RoleAuthoritiesDto roleAuthoritiesDto) {
+        RoleDto dto = roleService.assignAuthorities(roleAuthoritiesDto);
         return CustomApiResponse.ok("Role assigned successfully", dto.getId());
     }
 

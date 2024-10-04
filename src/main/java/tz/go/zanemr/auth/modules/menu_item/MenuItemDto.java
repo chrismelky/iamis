@@ -28,6 +28,7 @@ public class MenuItemDto extends BaseDto implements Serializable {
     private String icon;
     @NotNull
     private String state;
+
     @NotNull
     private Integer sortOrder;
     private String translationLabel;

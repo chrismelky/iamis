@@ -10,4 +10,6 @@ public interface MenuItemService extends BaseCrudService<MenuItemDto, MenuItem> 
 
     List<MenuGroupDto> getWithItems(Map<String, List<Long>> groupItemIds);
 
+    MenuItemDto assignAuthorities(MenuAuthoritiesDto menuAuthoritiesDto);
+
 }

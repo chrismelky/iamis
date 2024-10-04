@@ -1,6 +1,10 @@
 #This service configuration
 service-name: auth
 
+#Super admin config
+admin-email: admin@zanemr.go.tz
+admin-password: password
+
 spring:
   application:
     name: ${service-name}
@@ -38,4 +42,6 @@ spring:
       thread-name-prefix: ${service-name}-scheduling
       pool:
         size: 10
+  profiles:
+    active: dev
 

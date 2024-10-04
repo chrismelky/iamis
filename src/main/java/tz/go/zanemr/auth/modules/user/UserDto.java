@@ -19,16 +19,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public  class UserDto extends BaseDto  {
+public class UserDto extends BaseDto {
 
-    private  String email;
-    private  String firstName;
-    private  String middleName;
-    private  String lastName;
-    private  String sex;
-    private  String mobileNumber;
-    private  Boolean isActive;
-    private  Boolean passwordChanged;
-    private  List<UUID> roleIds;
+    private String email;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String sex;
+    private String mobileNumber;
+    private Boolean isActive;
+    private Boolean passwordChanged;
+    private List<UUID> roleIds;
+    private UUID facilityId;
+    private String facilityName;
+    private String facilityCode;
 
 }

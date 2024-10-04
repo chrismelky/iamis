@@ -1,4 +1,5 @@
 package tz.go.zanemr.auth.modules.user;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import tz.go.zanemr.auth.modules.role.Role;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -45,6 +47,12 @@ public class User extends BaseModel {
 
     @Column(name = "password_changed")
     private Boolean passwordChanged;
+
+    private UUID facilityId;
+
+    private String facilityName;
+
+    private String facilityCode;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

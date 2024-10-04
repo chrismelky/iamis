@@ -41,17 +41,10 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
             menuItem = menuItemRepository.findByUuid(dto.getUuid())
                     .orElseThrow(() -> new EntityNotFoundException("Cannot find menu item with uuid " + dto.getUuid()));
             menuItem = menuItemMapper.partialUpdate(dto, menuItem);
-            menuItem.setAuthorities(new HashSet<>());
         } else {
             menuItem.setUuid(Utils.generateUuid());
         }
-        if (dto.getAuthorityIds() != null) {
-            for (UUID authorityId : dto.getAuthorityIds()) {
-                menuItem.addAuthority(authorityRepository.getReferenceByUuid(authorityId));
-            }
-        }
         menuItem = menuItemRepository.save(menuItem);
-
         return menuItemMapper.toDto(menuItem);
     }
 
@@ -90,5 +83,17 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
                     );
                 });
         return groups;
+    }
+
+    @Override
+    public MenuItemDto assignAuthorities(MenuAuthoritiesDto menuAuthoritiesDto) {
+        MenuItem menuItem = menuItemRepository.findByUuid(menuAuthoritiesDto.getMenuItemUuid())
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find menu item with uuid " + menuAuthoritiesDto.getMenuItemUuid()));
+
+        menuItem.setAuthorities(new HashSet<>());
+        for (UUID authorityId : menuAuthoritiesDto.getAuthorityIds()) {
+            menuItem.addAuthority(authorityRepository.getReferenceByUuid(authorityId));
+        }
+        return menuItemMapper.toDto(menuItem);
     }
 }

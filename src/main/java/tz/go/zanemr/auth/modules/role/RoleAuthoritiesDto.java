@@ -9,8 +9,8 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class RoleAuthorities {
+public class RoleAuthoritiesDto {
 
     private UUID roleId;
-    private Set<Long> authorityIds = new HashSet<>();
+    private Set<UUID> authorityIds = new HashSet<>();
 }

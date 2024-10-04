@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import tz.go.zanemr.auth.core.AppConstants;
 import tz.go.zanemr.auth.core.CustomApiResponse;
+import tz.go.zanemr.auth.modules.role.RoleAuthoritiesDto;
 
 import java.util.Map;
 import java.util.UUID;
@@ -52,5 +53,17 @@ public class MenuItemResource {
     public CustomApiResponse delete(@PathVariable UUID uuid) {
         menuItemService.delete(uuid);
         return CustomApiResponse.ok("Menu item deleted");
+    }
+
+    /**
+     * Assigns authorities to a menu item.
+     *
+     * @param menuAuthoritiesDto the {@link RoleAuthoritiesDto} object containing the menuitem and authority data.
+     * @return {@link CustomApiResponse} containing the ID of the menuitem and confirmation of assignment.
+     */
+    @PostMapping("/assign-authorities")
+    public CustomApiResponse assignAuthorities(@Valid MenuAuthoritiesDto menuAuthoritiesDto) {
+        MenuItemDto dto = menuItemService.assignAuthorities(menuAuthoritiesDto);
+        return CustomApiResponse.ok("MenuItem assigned successfully", dto.getId());
     }
 }

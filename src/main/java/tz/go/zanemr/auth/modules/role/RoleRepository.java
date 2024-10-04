@@ -2,6 +2,8 @@ package tz.go.zanemr.auth.modules.role;
 
 import tz.go.zanemr.auth.core.BaseRepository;
 
+import java.util.Optional;
+
 /**
  * Repository interface for {@link Role} entities.
  * <p>
@@ -11,4 +13,5 @@ import tz.go.zanemr.auth.core.BaseRepository;
  */
 public interface RoleRepository extends BaseRepository<Role, Long> {
 
+    Optional<Role> findRoleByName(String name);
 }
