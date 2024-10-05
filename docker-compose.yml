@@ -16,7 +16,8 @@ services:
       - zanemr
     depends_on:
       - zanemr-auth-service-db
-    command: ["java", "-jar", "app.jar", "--spring.config.location=/config/application-${SPRING_PROFILES_ACTIVE}.yml"]
+#    command: ["java", "-jar", "app.jar", "--spring.config.location=/config/application-${SPRING_PROFILES_ACTIVE}.yml"]
+    command: ["java", "-jar", "app.jar"]
 
   zanemr-auth-service-db:
     image: postgres:13-alpine
@@ -26,6 +27,8 @@ services:
       - POSTGRES_DB=zanemr_authorization
       - POSTGRES_USER=zanemr
       - POSTGRES_PASSWORD=p@ssw0rd
+    ports:
+      - "5001:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:

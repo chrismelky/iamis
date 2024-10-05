@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.user;
 
+import feign.FeignException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tz.go.zanemr.auth.core.CustomApiResponse;
 import tz.go.zanemr.auth.core.SearchService;
 import tz.go.zanemr.auth.core.Utils;
+import tz.go.zanemr.auth.modules.external_service.ClientRegistrationFeignClient;
 import tz.go.zanemr.auth.modules.role.RoleRepository;
 
 import java.util.HashSet;
@@ -28,18 +31,21 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
 
     private final UserMapper userMapper;
 
+    private final ClientRegistrationFeignClient crFeignClient;
+
     @Value("${zanemr.default-password:password}")
     private String defaultPassword;
 
     @Override
     public UserDto save(UserDto dto) {
         User user = userMapper.toEntity(dto);
-        if(dto.getUuid() != null) {
+        if (dto.getUuid() != null) {
             user = userRepository.findByUuid(dto.getUuid())
                     .orElseThrow(
-                            ()-> new EntityNotFoundException("User with id " + dto.getUuid() + " not found"));
+                            () -> new EntityNotFoundException("User with id " + dto.getUuid() + " not found"));
             user = userMapper.partialUpdate(dto, user);
             user.setRoles(new HashSet<>());
+
         } else {
             user.setUuid(Utils.generateUuid());
             user.setPassword(passwordEncoder.encode(defaultPassword));
@@ -47,20 +53,43 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
         for (UUID roleId : dto.getRoleIds()) {
             user.addRole(roleRepository.getReferenceByUuid(roleId));
         }
+        user = setUserFacility(user, dto.getFacilityId());
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
 
+    /**
+     * Get facility details form client registration service
+     *
+     * @param user entity to update facility detail
+     * @param facilityId facility UUID
+     * @return @User
+     */
+    private User setUserFacility(User user, UUID facilityId) {
+        if (facilityId != null) {
+            try {
+                CustomApiResponse response = crFeignClient.findFacilityByUuid(facilityId);
+                Map<String, Object> facility = (Map<String, Object>) response.getData();
+                user.setFacilityCode((String) facility.get("code"));
+                user.setFacilityName((String) facility.get("name"));
+
+            } catch (FeignException.NotFound e) {
+                throw new ValidationException("Facility with uuid " + facilityId + " not found");
+            }
+        }
+        return user;
+    }
+
     @Override
     public Page<UserDto> findAll(Pageable pageable, Map<String, Object> searchParams) {
-        return userRepository.findAll(createSpecification(User.class, searchParams),pageable)
+        return userRepository.findAll(createSpecification(User.class, searchParams), pageable)
                 .map(userMapper::toDto);
     }
 
     @Override
     public UserDto findById(UUID uuid) {
         return userRepository.findByUuid(uuid).map(userMapper::toDto).orElseThrow(
-                ()-> new EntityNotFoundException("User with id " + uuid + " not found")
+                () -> new EntityNotFoundException("User with id " + uuid + " not found")
         );
     }
 
@@ -68,7 +97,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
     public void delete(UUID uuid) {
         try {
             userRepository.deleteByUuid(uuid);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ValidationException("Cannot delete user with id " + uuid);
         }
     }

@@ -43,5 +43,5 @@ spring:
       pool:
         size: 10
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:dev}
 
