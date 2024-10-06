@@ -1,6 +1,5 @@
 package tz.go.zanemr.auth.modules.user;
 
-import feign.FeignException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
 
     private final UserMapper userMapper;
 
-    private final ClientRegistrationFeignClient crFeignClient;
+ //   private final ClientRegistrationFeignClient crFeignClient;
 
     @Value("${zanemr.default-password:password}")
     private String defaultPassword;
@@ -53,32 +52,32 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
         for (UUID roleId : dto.getRoleIds()) {
             user.addRole(roleRepository.getReferenceByUuid(roleId));
         }
-        user = setUserFacility(user, dto.getFacilityId());
+    //    user = setUserFacility(user, dto.getFacilityId());
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
 
-    /**
-     * Get facility details form client registration service
-     *
-     * @param user entity to update facility detail
-     * @param facilityId facility UUID
-     * @return @User
-     */
-    private User setUserFacility(User user, UUID facilityId) {
-        if (facilityId != null) {
-            try {
-                CustomApiResponse response = crFeignClient.findFacilityByUuid(facilityId);
-                Map<String, Object> facility = (Map<String, Object>) response.getData();
-                user.setFacilityCode((String) facility.get("code"));
-                user.setFacilityName((String) facility.get("name"));
-
-            } catch (FeignException.NotFound e) {
-                throw new ValidationException("Facility with uuid " + facilityId + " not found");
-            }
-        }
-        return user;
-    }
+//    /**
+//     * Get facility details form client registration service
+//     *
+//     * @param user entity to update facility detail
+//     * @param facilityId facility UUID
+//     * @return @User
+//     */
+//    private User setUserFacility(User user, UUID facilityId) {
+//        if (facilityId != null) {
+//            try {
+//                CustomApiResponse response = crFeignClient.findFacilityByUuid(facilityId);
+//                Map<String, Object> facility = (Map<String, Object>) response.getData();
+//                user.setFacilityCode((String) facility.get("code"));
+//                user.setFacilityName((String) facility.get("name"));
+//
+//            } catch (FeignException.NotFound e) {
+//                throw new ValidationException("Facility with uuid " + facilityId + " not found");
+//            }
+//        }
+//        return user;
+//    }
 
     @Override
     public Page<UserDto> findAll(Pageable pageable, Map<String, Object> searchParams) {

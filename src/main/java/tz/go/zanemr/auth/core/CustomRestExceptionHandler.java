@@ -1,6 +1,5 @@
 package tz.go.zanemr.auth.core;
 
-import com.nimbusds.jwt.proc.BadJWTException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
@@ -177,6 +176,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
   @Override
   public ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
     super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    ex.printStackTrace();
     CustomErrorResponse customErrorResponse = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Whoops something went wrong", ex.getMessage());
     return new ResponseEntity<>(customErrorResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
   }

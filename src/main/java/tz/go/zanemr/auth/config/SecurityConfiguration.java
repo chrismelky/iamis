@@ -229,9 +229,10 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOrigin(webClientUrl);
+        config.addAllowedOrigin("http://localhost:4200");
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
