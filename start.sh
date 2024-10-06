@@ -44,5 +44,5 @@ fi
 
 # Step 3: Start the Docker Compose stack with the appropriate profile
 echo "Starting Docker Compose with profile: $PROFILE"
-SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build
+SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build -d
 
