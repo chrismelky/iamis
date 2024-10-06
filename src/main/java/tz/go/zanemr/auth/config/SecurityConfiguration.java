@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -37,6 +38,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -114,6 +116,7 @@ public class SecurityConfiguration {
         http
                 .securityMatcher("/login", "/logout", "/oauth2/**", "/userinfo")
                 .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll() // Allow CORS preflight
@@ -122,8 +125,14 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
 
                 ).formLogin(
-                        loginForm ->loginForm.loginPage("/login")
-                                .loginProcessingUrl("/login"));
+                        loginForm -> loginForm.loginPage("/login")
+                                .loginProcessingUrl("/login"))
+                .logout(
+                        logout -> logout.logoutUrl("/logout")
+                                .logoutSuccessHandler(logoutSuccessHandler())
+                                .invalidateHttpSession(false)
+                                .clearAuthentication(true)
+                );
 
         return http.build();
     }
@@ -170,7 +179,7 @@ public class SecurityConfiguration {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri(webClientUrl +"/auth-callback")
+                .redirectUri(webClientUrl + "/auth-callback")
                 .postLogoutRedirectUri(webClientUrl)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
@@ -233,6 +242,19 @@ public class SecurityConfiguration {
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return (request, response, authentication) -> {
+
+
+            // Optional: You can add logic to send the logout request to the IDP
+            // Even if the ID token is invalid, proceed with logout
+
+            // Redirect to login page after logout
+            response.sendRedirect("/login");
+        };
     }
 
 }

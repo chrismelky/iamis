@@ -48,6 +48,8 @@ public class User extends BaseModel {
     @Column(name = "password_changed")
     private Boolean passwordChanged;
 
+    private Boolean isFacilityUser = Boolean.FALSE;
+
     private UUID facilityId;
 
     private String facilityName;

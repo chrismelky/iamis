@@ -39,6 +39,7 @@ public class Authority extends BaseModel {
     private String description;
 
     @ManyToMany(mappedBy = "authorities")
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore

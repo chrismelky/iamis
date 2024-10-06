@@ -4,14 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import tz.go.zanemr.auth.core.CustomApiResponse;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthorityService {
+    private final AuthorityMapper authorityMapper;
 
     private final AuthorityRepository authorityRepository;
 
@@ -30,5 +35,9 @@ public class AuthorityService {
             authorityRepository.save(authority);
             log.info("***** Created authority: {}", authority.getUuid());
         }
+    }
+
+    public List<AuthorityDto> findAll() {
+        return authorityRepository.findAll().stream().map(authorityMapper::toDto).collect(Collectors.toList());
     }
 }

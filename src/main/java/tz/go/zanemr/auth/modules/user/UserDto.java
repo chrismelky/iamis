@@ -34,6 +34,7 @@ public class UserDto extends BaseDto {
     private Boolean passwordChanged = Boolean.FALSE;
     private List<UUID> roleIds = new ArrayList<>();
     private UUID facilityId;
+    private Boolean isFacilityUser = Boolean.FALSE;
     private String facilityName;
     private String facilityCode;
 
