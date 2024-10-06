@@ -19,7 +19,7 @@ services:
     command: ["java", "-jar", "app.jar"]
 
   zanemr-auth-service-db:
-    image: postgres:15-alpine
+    image: postgres:13-alpine
     restart: always
     container_name: zanemr-auth-service-db
     environment:
