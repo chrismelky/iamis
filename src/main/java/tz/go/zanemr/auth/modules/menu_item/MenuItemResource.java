@@ -62,7 +62,7 @@ public class MenuItemResource {
      * @return {@link CustomApiResponse} containing the ID of the menuitem and confirmation of assignment.
      */
     @PostMapping("/assign-authorities")
-    public CustomApiResponse assignAuthorities(@Valid MenuAuthoritiesDto menuAuthoritiesDto) {
+    public CustomApiResponse assignAuthorities(@Valid @RequestBody MenuAuthoritiesDto menuAuthoritiesDto) {
         MenuItemDto dto = menuItemService.assignAuthorities(menuAuthoritiesDto);
         return CustomApiResponse.ok("MenuItem assigned successfully", dto.getId());
     }

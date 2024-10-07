@@ -1,14 +1,16 @@
 package tz.go.zanemr.auth.modules.role;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+import tz.go.zanemr.auth.core.NoAuthorization;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class RoleAuthoritiesDto {
 
     private UUID roleId;

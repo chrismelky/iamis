@@ -115,7 +115,7 @@ public class RoleResource {
      */
     @PostMapping("/assign-authorities")
     @Transactional
-    public CustomApiResponse assignAuthorities(@Valid RoleAuthoritiesDto roleAuthoritiesDto) {
+    public CustomApiResponse assignAuthorities(@Valid @RequestBody RoleAuthoritiesDto roleAuthoritiesDto) {
         RoleDto dto = roleService.assignAuthorities(roleAuthoritiesDto);
         return CustomApiResponse.ok("Role assigned successfully", dto.getId());
     }
