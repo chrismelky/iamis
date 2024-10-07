@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.role;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class RoleResource {
      * @throws ValidationException if the provided role DTO contains an id or uuid (new roles should not have an id or uuid).
      */
     @PostMapping
+    @Transactional
     public CustomApiResponse create(@Valid @RequestBody RoleDto dto) {
         if (dto.getId() != null || dto.getUuid() != null) {
             throw new ValidationException("New role should not have an id or uuid");
@@ -56,6 +58,7 @@ public class RoleResource {
      * @throws ValidationException if the provided role DTO does not have an uuid or if the UUIDs do not match.
      */
     @PutMapping("/{uuid}")
+    @Transactional
     public CustomApiResponse update(@Valid @RequestBody RoleDto dto,
                                     @PathVariable UUID uuid) {
         if (dto.getUuid() == null) {
@@ -98,6 +101,7 @@ public class RoleResource {
      * @return {@link CustomApiResponse} confirming the successful deletion.
      */
     @DeleteMapping("/{uuid}")
+    @Transactional
     public CustomApiResponse delete(@PathVariable UUID uuid) {
         roleService.delete(uuid);
         return CustomApiResponse.ok("Role deleted successfully");
@@ -110,6 +114,7 @@ public class RoleResource {
      * @return {@link CustomApiResponse} containing the ID of the role and confirmation of assignment.
      */
     @PostMapping("/assign-authorities")
+    @Transactional
     public CustomApiResponse assignAuthorities(@Valid RoleAuthoritiesDto roleAuthoritiesDto) {
         RoleDto dto = roleService.assignAuthorities(roleAuthoritiesDto);
         return CustomApiResponse.ok("Role assigned successfully", dto.getId());
