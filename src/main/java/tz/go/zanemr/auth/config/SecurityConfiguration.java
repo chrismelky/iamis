@@ -189,6 +189,7 @@ public class SecurityConfiguration {
                         .requireAuthorizationConsent(false)
                         .build())
                 .tokenSettings(TokenSettings.builder()
+                        .authorizationCodeTimeToLive(Duration.ofDays(1))
                         .accessTokenTimeToLive(Duration.ofSeconds(1000))
                         .build())
                 .build();
