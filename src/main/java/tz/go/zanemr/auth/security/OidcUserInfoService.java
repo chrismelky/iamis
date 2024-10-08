@@ -38,9 +38,16 @@ public class OidcUserInfoService   {
                 .builder()
                 .subject(user.getEmail())
                 .email(user.getEmail())
-                .claim("menus", getMenus(user))
+                .claim("email", user.getEmail())
                 .claim("firstName", user.getFirstName())
+                .claim("middleName", user.getLastName())
                 .claim("lastName", user.getLastName())
+                .claim("passwordChanged", user.getPasswordChanged())
+                .claim("facilityName", user.getFacilityName())
+                .claim("facilityId", user.getFacilityId())
+                .claim("facilityCode", user.getFacilityCode())
+                .claim("isActive", user.getIsActive())
+                .claim("menus", getMenus(user))
                 .build();
     }
 

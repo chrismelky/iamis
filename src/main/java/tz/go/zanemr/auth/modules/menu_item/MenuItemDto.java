@@ -35,6 +35,7 @@ public class MenuItemDto extends BaseDto implements Serializable {
 
     @NotNull
     private Long menuGroupId;
+    private String menuGroupName;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<UUID> authorityIds;

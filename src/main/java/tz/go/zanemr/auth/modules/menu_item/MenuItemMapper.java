@@ -13,6 +13,7 @@ public interface MenuItemMapper {
     MenuItem toEntity(MenuItemDto menuItemDto);
 
     @Mapping(source = "authorities", target = "authorityIds", qualifiedByName = "authorityToIds")
+    @Mapping(target = "menuGroupName", source = "menuGroup.name")
     MenuItemDto toDto(MenuItem menuItem);
 
     MenuItemDto toDtoNoAuth(MenuItem menuItem);

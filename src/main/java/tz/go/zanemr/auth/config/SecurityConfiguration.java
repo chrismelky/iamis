@@ -46,6 +46,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tz.go.zanemr.auth.security.CustomUserDetailsService;
 import tz.go.zanemr.auth.security.OidcUserInfoService;
 
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -82,11 +83,10 @@ public class SecurityConfiguration {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(oidc -> oidc.userInfoEndpoint(
-                        i -> i.userInfoMapper(userInfoMapper)
-                ));
+                                i -> i.userInfoMapper(userInfoMapper)
+                        )
+                );
 
-
-        // Enable OpenID Connect 1.0
         http.cors(Customizer.withDefaults())
                 .oauth2ResourceServer(
                         (resourceServer) -> resourceServer
@@ -127,12 +127,8 @@ public class SecurityConfiguration {
 
                 ).formLogin(
                         loginForm -> loginForm.loginPage("/login")
-                                .loginProcessingUrl("/login"))
-                .logout(
-                        logout -> logout.logoutUrl("/logout")
-                                .logoutSuccessHandler(logoutSuccessHandler())
-                                .invalidateHttpSession(false)
-                                .clearAuthentication(true)
+                                .loginProcessingUrl("/login")
+                                .defaultSuccessUrl(webClientUrl)
                 );
 
         return http.build();
@@ -175,7 +171,7 @@ public class SecurityConfiguration {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        RegisteredClient oidcClient = RegisteredClient.withId("webapp")
                 .clientId("webapp")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -190,7 +186,7 @@ public class SecurityConfiguration {
                         .requireAuthorizationConsent(false)
                         .build())
                 .tokenSettings(TokenSettings.builder()
-                        .authorizationCodeTimeToLive(Duration.ofDays(1))
+                        .authorizationCodeTimeToLive(Duration.ofHours(8))
                         .accessTokenTimeToLive(Duration.ofSeconds(1000))
                         .build())
                 .build();
@@ -240,7 +236,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin(webClientUrl);
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
@@ -250,7 +246,7 @@ public class SecurityConfiguration {
     public LogoutSuccessHandler logoutSuccessHandler() {
         return (request, response, authentication) -> {
 
-
+            authentication.setAuthenticated(false);
             // Optional: You can add logic to send the logout request to the IDP
             // Even if the ID token is invalid, proceed with logout
 

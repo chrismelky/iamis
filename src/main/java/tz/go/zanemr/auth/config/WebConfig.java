@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new CustomAuthorizationInterceptor());
+        registry.addInterceptor(new CustomAuthorizationInterceptor());
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 }
