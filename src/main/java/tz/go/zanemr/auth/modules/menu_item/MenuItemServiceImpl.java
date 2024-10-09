@@ -87,8 +87,8 @@ public class MenuItemServiceImpl extends SearchService<MenuItem> implements Menu
 
     @Override
     public MenuItemDto assignAuthorities(MenuAuthoritiesDto menuAuthoritiesDto) {
-        MenuItem menuItem = menuItemRepository.findByUuid(menuAuthoritiesDto.getMenuItemUuid())
-                .orElseThrow(() -> new EntityNotFoundException("Cannot find menu item with uuid " + menuAuthoritiesDto.getMenuItemUuid()));
+        MenuItem menuItem = menuItemRepository.findByUuid(menuAuthoritiesDto.getMenuItemId())
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find menu item with uuid " + menuAuthoritiesDto.getMenuItemId()));
 
         menuItem.setAuthorities(new HashSet<>());
         for (UUID authorityId : menuAuthoritiesDto.getAuthorityIds()) {
