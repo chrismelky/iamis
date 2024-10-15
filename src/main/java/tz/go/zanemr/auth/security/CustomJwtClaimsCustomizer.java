@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.stereotype.Component;
+import tz.go.zanemr.auth.modules.user.User;
+import tz.go.zanemr.auth.modules.user.UserDto;
 import tz.go.zanemr.auth.modules.user.UserRepository;
 
 import java.util.HashMap;
@@ -17,14 +20,24 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class CustomJwtClaimsCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
+    private final UserRepository userRepository;
 
     @Override
     public void customize(JwtEncodingContext context) {
         if (context.getTokenType().getValue().contentEquals("access_token")) {
+
             Authentication principal = context.getPrincipal();
+            UserDto user = userRepository.findUserDtoByUsername(principal.getName())
+                    .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
             log.info(" user authorities : {}", principal.getAuthorities().size());
             Map<String, Object> customClaims = new HashMap<>();
-            customClaims.put("authorities",  principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+            customClaims.put("facilityId",user.getFacilityId() != null ?  user.getFacilityId().toString(): null);
+            customClaims.put("facilityName", user.getFacilityName());
+            customClaims.put("firstName", user.getFirstName());
+            customClaims.put("lastName", user.getLastName());
+            customClaims.put("middleName", user.getMiddleName());
+            customClaims.put("facilityCode", user.getFacilityCode());
+            customClaims.put("authorities", principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
             context.getClaims().claims(claims -> claims.putAll(customClaims));
         }
     }

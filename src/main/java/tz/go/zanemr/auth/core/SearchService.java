@@ -32,7 +32,8 @@ public class SearchService<T> {
                                             if (field.getType() == Long.class) {
                                                 return builder.equal(root.get(key), search.get(key));
                                             } else if (field.getType() == Boolean.class) {
-                                                return builder.equal(root.get(key), (Boolean) search.get(key));
+                                                Boolean bool = search.get(key).toString().equalsIgnoreCase("true");
+                                                return builder.equal(root.get(key), bool);
                                             }
                                             if (field.getType().isEnum()) {
                                                 return builder.equal(root.get(key), search.get(key));
@@ -47,7 +48,8 @@ public class SearchService<T> {
                                             if (field.getType() == Long.class) {
                                                 return builder.equal(root.get(key), search.get(key));
                                             } else if (field.getType() == Boolean.class) {
-                                                return builder.equal(root.get(key), (Boolean) search.get(key));
+                                                Boolean bool = search.get(key).toString().equalsIgnoreCase("true");
+                                                return builder.equal(root.get(key), bool);
                                             }
                                             if (field.getType().isEnum()) {
                                                 return builder.equal(root.get(key), search.get(key));

@@ -1,9 +1,7 @@
 package tz.go.zanemr.auth.security.authentication;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -51,7 +49,6 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         this.objectMapper.registerModules(securityModules);
         this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
         this.objectMapper.registerModule(new CoreJackson2Module());
-        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
 
     }
 
@@ -266,18 +263,50 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         }
     }
 
-    private Map<String, Object> parseMap(String data) {
+    private HashMap<String, Object> parseMap(String data) {
         try {
-            return this.objectMapper.readValue(data, new TypeReference<Map<String, Object>>() {
+            return this.objectMapper.readValue(data, new TypeReference<HashMap<String, Object>>() {
             });
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }
     }
+    public Map<String, Object> convertMap(Map<String, Object> inputMap) {
+        Map<String, Object> outputMap = new HashMap<>();
+        for (Map.Entry<String, Object> entry : inputMap.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof Map) {
+                // Recursive call for nested maps
+                outputMap.put(key, convertMap((Map<String, Object>) value));
+            } else if (value instanceof List) {
+                // Handle lists (if needed)
+                outputMap.put(key, convertList((List<Object>) value));
+            } else {
+                outputMap.put(key, value);
+            }
+        }
+        return outputMap;
+    }
+
+    public List<Object> convertList(List<Object> inputList) {
+        List<Object> outputList = new ArrayList<>();
+        for (Object item : inputList) {
+            if (item instanceof Map) {
+                outputList.add(convertMap((Map<String, Object>) item));
+            } else if (item instanceof List) {
+                outputList.add(convertList((List<Object>) item));
+            } else {
+                outputList.add(item);
+            }
+        }
+        return outputList;
+    }
 
     private String writeMap(Map<String, Object> metadata) {
         try {
-            return this.objectMapper.writeValueAsString(metadata);
+            return this.objectMapper.writeValueAsString(convertMap(metadata));
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }

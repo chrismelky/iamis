@@ -107,7 +107,7 @@ public class Initializer implements ApplicationRunner {
     }
 
     private Role initializeRole() {
-        Optional<Role> roleOptional = roleRepository.findRoleByName("SUPER ADMINISTRATOR");
+        Optional<Role> roleOptional = roleRepository.findRoleByCode("SUPER_ADMINISTRATOR");
         if (roleOptional.isEmpty()) {
             Set<Authority> authorities = new HashSet<>(authorityRepository.findByService(serviceName));
             Role role = new Role();

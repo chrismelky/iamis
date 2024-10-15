@@ -1,5 +1,6 @@
 package tz.go.zanemr.auth.modules.menu_item;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MenuAuthoritiesDto {
 
-    private UUID menuItemUuid;
+    @NotNull
+    private UUID menuItemId;
     private Set<UUID> authorityIds = new HashSet<>();
 }

@@ -38,4 +38,24 @@ public class UserDto extends BaseDto {
     private String facilityName;
     private String facilityCode;
 
+    public UserDto(
+            Long id,
+            UUID uuid,
+            String firstName,
+            String middleName,
+            String lastName,
+            UUID facilityId,
+            String facilityName,
+            String facilityCode) {
+
+        this.setId(id);
+        this.setUuid(uuid);
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.facilityId = facilityId;
+        this.facilityName = facilityName;
+        this.facilityCode = facilityCode;
+    }
+
 }

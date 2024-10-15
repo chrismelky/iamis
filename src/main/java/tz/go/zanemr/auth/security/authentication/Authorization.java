@@ -2,6 +2,7 @@ package tz.go.zanemr.auth.security.authentication;
 
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,6 +19,7 @@ public class Authorization {
     private String authorizationGrantType;
     @Column(length = 1000)
     private String authorizedScopes;
+    @JsonIgnore
     private String attributes;
     @Column(length = 500)
     private String state;
@@ -47,6 +49,7 @@ public class Authorization {
     private Instant oidcIdTokenIssuedAt;
     private Instant oidcIdTokenExpiresAt;
     @Column(length = 2000)
+    @JsonIgnore
     private String oidcIdTokenMetadata;
     @Column(length = 2000)
     private String oidcIdTokenClaims;
@@ -61,6 +64,7 @@ public class Authorization {
     private Instant deviceCodeIssuedAt;
     private Instant deviceCodeExpiresAt;
     @Column(length = 2000)
+    @JsonIgnore
     private String deviceCodeMetadata;
 
     public String getId() {

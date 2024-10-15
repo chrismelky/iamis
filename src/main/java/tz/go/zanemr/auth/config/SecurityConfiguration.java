@@ -83,11 +83,13 @@ public class SecurityConfiguration {
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(oidc -> oidc.userInfoEndpoint(
                         i -> i.userInfoMapper(userInfoMapper)
+
                 ));
 
 
         // Enable OpenID Connect 1.0
         http.cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(
                         (resourceServer) -> resourceServer
                                 .jwt(Customizer.withDefaults())
@@ -130,7 +132,7 @@ public class SecurityConfiguration {
                 .logout(
                         logout -> logout.logoutUrl("/logout")
                                 .logoutSuccessHandler(logoutSuccessHandler())
-                                .invalidateHttpSession(false)
+                                .invalidateHttpSession(true)
                                 .clearAuthentication(true)
                 );
 
@@ -238,7 +240,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin(webClientUrl);
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;

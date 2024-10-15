@@ -5,6 +5,7 @@ import org.mapstruct.*;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface MenuGroupMapper {
+
     MenuGroup toEntity(MenuGroupDto menuGroupDto);
 
     MenuGroupDto toDto(MenuGroup menuGroup);

@@ -14,4 +14,6 @@ import java.util.Optional;
 public interface RoleRepository extends BaseRepository<Role, Long> {
 
     Optional<Role> findRoleByName(String name);
+
+    Optional<Role> findRoleByCode(String code);
 }
