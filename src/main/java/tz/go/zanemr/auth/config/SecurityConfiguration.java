@@ -107,6 +107,11 @@ public class SecurityConfiguration {
                                     );
                         }
                 )
+                .logout(l -> l.logoutSuccessHandler(
+                        ((request, response, authentication) -> {
+                            log.debug("\n\n\n\n\n 1:**************\n\n\n\n\n");
+                        })
+                ))
                 .userDetailsService(userDetailsService);
 
         return http.build();
@@ -131,7 +136,11 @@ public class SecurityConfiguration {
                 ).formLogin(
                         loginForm -> loginForm.loginPage("/login")
                                 .loginProcessingUrl("/login")
-                );
+                ).logout(l -> l.logoutSuccessHandler(
+                        ((request, response, authentication) -> {
+                            log.debug("\n\n\n\n\n 2.**************\n\n\n\n\n");
+                        })
+                ));
 
         return http.build();
     }
@@ -149,6 +158,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/**").authenticated()
 
                 )
+                .logout(l -> l.logoutSuccessHandler(
+                        ((request, response, authentication) -> {
+                            log.debug("\n\n\n\n\n 3.**************\n\n\n\n\n");
+                        })
+                ))
                 .oauth2ResourceServer(
                         (resourceServer) -> resourceServer
                                 .jwt(Customizer.withDefaults())
