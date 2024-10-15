@@ -41,6 +41,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -91,7 +92,6 @@ public class SecurityConfiguration {
 
         // Enable OpenID Connect 1.0
         http.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(
                         (resourceServer) -> resourceServer
                                 .jwt(Customizer.withDefaults())
@@ -130,17 +130,15 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll() // Allow CORS preflight
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("favicon.ico").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
 
                 ).formLogin(
                         loginForm -> loginForm.loginPage("/login")
                                 .loginProcessingUrl("/login")
-                ).logout(l -> l.logoutSuccessHandler(
-                        ((request, response, authentication) -> {
-                            log.debug("\n\n\n\n\n 2.**************\n\n\n\n\n");
-                        })
-                ));
+                                .defaultSuccessUrl(webClientUrl)
+                );
 
         return http.build();
     }
@@ -158,11 +156,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/**").authenticated()
 
                 )
-                .logout(l -> l.logoutSuccessHandler(
-                        ((request, response, authentication) -> {
-                            log.debug("\n\n\n\n\n 3.**************\n\n\n\n\n");
-                        })
-                ))
                 .oauth2ResourceServer(
                         (resourceServer) -> resourceServer
                                 .jwt(Customizer.withDefaults())
@@ -202,6 +195,7 @@ public class SecurityConfiguration {
                         .requireAuthorizationConsent(false)
                         .build())
                 .tokenSettings(TokenSettings.builder()
+                        .authorizationCodeTimeToLive(Duration.ofHours(8))
                         .accessTokenTimeToLive(Duration.ofSeconds(1000))
                         .build())
                 .build();
