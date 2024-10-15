@@ -25,6 +25,8 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -45,6 +47,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tz.go.zanemr.auth.security.CustomUserDetailsService;
 import tz.go.zanemr.auth.security.OidcUserInfoService;
+import tz.go.zanemr.auth.security.authentication.Authorization;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -85,7 +88,6 @@ public class SecurityConfiguration {
                         i -> i.userInfoMapper(userInfoMapper)
 
                 ));
-
 
         // Enable OpenID Connect 1.0
         http.cors(Customizer.withDefaults())
@@ -128,12 +130,7 @@ public class SecurityConfiguration {
 
                 ).formLogin(
                         loginForm -> loginForm.loginPage("/login")
-                                .loginProcessingUrl("/login"))
-                .logout(
-                        logout -> logout.logoutUrl("/logout")
-                                .logoutSuccessHandler(logoutSuccessHandler())
-                                .invalidateHttpSession(true)
-                                .clearAuthentication(true)
+                                .loginProcessingUrl("/login")
                 );
 
         return http.build();
@@ -247,15 +244,10 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public LogoutSuccessHandler logoutSuccessHandler() {
+    public LogoutSuccessHandler logoutSuccessHandler(OAuth2AuthorizationService authorizationService) {
         return (request, response, authentication) -> {
+            log.error("##############\n##########\n");
 
-
-            // Optional: You can add logic to send the logout request to the IDP
-            // Even if the ID token is invalid, proceed with logout
-
-            // Redirect to login page after logout
-            response.sendRedirect("/login");
         };
     }
 
