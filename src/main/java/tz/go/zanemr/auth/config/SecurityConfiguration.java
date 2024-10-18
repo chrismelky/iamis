@@ -88,7 +88,12 @@ public class SecurityConfiguration {
                 .oidc(oidc -> oidc.userInfoEndpoint(
                         i -> i.userInfoMapper(userInfoMapper)
 
-                ));
+                ).logoutEndpoint(l ->l.errorResponseHandler(((request, response, exception) -> {
+                    response.setHeader("Content-Type", "application/json; charset=utf-8");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"message\": \"Unauthorized\"}");
+                    response.getWriter().flush();
+                }))));
 
         // Enable OpenID Connect 1.0
         http.cors(Customizer.withDefaults())
