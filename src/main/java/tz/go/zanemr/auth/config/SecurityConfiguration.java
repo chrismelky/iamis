@@ -89,10 +89,7 @@ public class SecurityConfiguration {
                         i -> i.userInfoMapper(userInfoMapper)
 
                 ).logoutEndpoint(l ->l.errorResponseHandler(((request, response, exception) -> {
-                    response.setHeader("Content-Type", "application/json; charset=utf-8");
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().write("{\"message\": \"Unauthorized\"}");
-                    response.getWriter().flush();
+                    response.sendRedirect(webClientUrl);
                 }))));
 
         // Enable OpenID Connect 1.0
