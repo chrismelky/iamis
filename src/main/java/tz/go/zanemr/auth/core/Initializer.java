@@ -2,13 +2,21 @@ package tz.go.zanemr.auth.core;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import tz.go.zanemr.auth.modules.authority.Authority;
 import tz.go.zanemr.auth.modules.authority.AuthorityRepository;
@@ -21,15 +29,19 @@ import tz.go.zanemr.auth.modules.role.RoleRepository;
 import tz.go.zanemr.auth.modules.user.User;
 import tz.go.zanemr.auth.modules.user.UserRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static tz.go.zanemr.auth.core.Utils.splitCamelCase;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Initializer implements ApplicationRunner {
-
-    private static final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     private final RequestMappingInfoHandlerMapping requestMappingHandlerMapping;
 
@@ -53,6 +65,28 @@ public class Initializer implements ApplicationRunner {
 
     @Value("${admin-password}")
     private String adminPassword;
+
+    @Value("${kafka-connect-server}")
+    private String kafkaConnectServer;
+
+    @Value("${kafka-connect-port}")
+    private String kafkaConnectPort;
+
+    @Value("${db-server}")
+    private String dbServer;
+
+    @Value("${db-port}")
+    private String dbServerPort;
+
+    @Value("${db-name}")
+    private String dbName;
+
+    @Value("${db-username}")
+    private String dbUsername;
+
+    @Value("${db-password}")
+    private String dbPassword;
+
 
     // Load authorities
     public void initializeAuthorities() {
@@ -79,7 +113,7 @@ public class Initializer implements ApplicationRunner {
                                         String actionName = handlerMethod.getMethod().getName();
                                         String methodName = null;
                                         if (!requestMappingInfo.getMethodsCondition().getMethods().isEmpty()) {
-                                             methodName = requestMappingInfo.getMethodsCondition().getMethods().toString();
+                                            methodName = requestMappingInfo.getMethodsCondition().getMethods().toString();
                                         }
                                         String actionDisplayName = splitCamelCase(actionName);
                                         String authName = resourceName.toUpperCase().concat("_").concat(actionName.toUpperCase());
@@ -101,7 +135,7 @@ public class Initializer implements ApplicationRunner {
                                 }
                             });
         } catch (Exception e) {
-            logger.error("############# Error on initializing authorities #####################", e);
+            log.error("############# Error on initializing authorities #####################", e);
             System.exit(1);
         }
     }
@@ -114,7 +148,7 @@ public class Initializer implements ApplicationRunner {
             role.setName("SUPER ADMINISTRATOR");
             role.setCode(String.join("_", role.getName().split(" ")));
             authorities.forEach(role::addAuthority);
-            logger.info("The role with name SUPER ADMINISTRATOR has been created successfully");
+            log.info("The role with name SUPER ADMINISTRATOR has been created successfully");
             return roleRepository.save(role);
         }
         return roleOptional.get();
@@ -131,10 +165,10 @@ public class Initializer implements ApplicationRunner {
                 user.setIsActive(true);
                 user.getRoles().add(role);
                 userRepository.save(user);
-                logger.info("The user with name username Super admin  has been created successfully");
+                log.info("The user with name username Super admin  has been created successfully");
             }
         } catch (Exception e) {
-            logger.error("############# Error on initializing users #####################", e);
+            log.error("############# Error on initializing users #####################", e);
             System.exit(1);
         }
     }
@@ -194,11 +228,61 @@ public class Initializer implements ApplicationRunner {
         }
     }
 
+    public void initializeKafkaDebezium() {
+        log.info("------Initializing kafka connect  ---- ");
+        try {
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resolver.getResources("classpath:kafka/debezium/*.json");
+
+
+            Arrays.stream(resources).forEach(resource -> {
+                try {
+                    String jsonContent = new String(resource.getInputStream().readAllBytes());
+                    sendPostRequest(Objects.requireNonNull(resource.getFilename()).replace(".json", ""), jsonContent);
+                } catch (IOException e) {
+                    // Handle exceptions appropriately (e.g., logging, throwing custom exception)
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+        }
+
+    }
+
+    private void sendPostRequest(String connector, String jsonBody) {
+
+        if (dbServer.contains("localhost")) {
+            dbServer = "172.17.0.1";
+        }
+
+        jsonBody = jsonBody.replace("${db-server}", dbServer)
+                .replace("${db-port}", dbServerPort)
+                .replace("${db-username}", dbUsername)
+                .replace("${db-password}", dbPassword)
+                .replace("${db-name}", dbName);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        // Wrap body and headers into HttpEntity
+        HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
+        String externalServiceUrl = "http://" + kafkaConnectServer + ":" + kafkaConnectPort + "/connectors/" + connector + "/config";
+
+        log.info("---- Sending request foe connector {} for data {} ", externalServiceUrl, jsonBody);
+        ResponseEntity<String> resp = restTemplate.exchange(externalServiceUrl, HttpMethod.PUT, requestEntity,String.class);
+        log.info(resp.getStatusCode().toString());
+        log.info(resp.getBody());
+    }
+
     public void init() {
         initializeAuthorities();
         Role role = initializeRole();
         initializeUsers(role);
         initializeMenus();
+        initializeKafkaDebezium();
     }
 
 
