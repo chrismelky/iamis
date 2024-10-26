@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.stereotype.Component;
+import tz.go.zanemr.auth.core.BaseModel;
 import tz.go.zanemr.auth.modules.user.User;
 import tz.go.zanemr.auth.modules.user.UserDto;
 import tz.go.zanemr.auth.modules.user.UserMapper;
@@ -31,8 +32,7 @@ public class CustomJwtClaimsCustomizer implements OAuth2TokenCustomizer<JwtEncod
         if (context.getTokenType().getValue().contentEquals("access_token")) {
 
             Authentication principal = context.getPrincipal();
-            UserDto user = userRepository.findUserByEmail(principal.getName())
-                    .map(userMapper::toDto)
+            User user = userRepository.findUserByEmail(principal.getName())
                     .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
 
             log.info(" user authorities : {}", principal.getAuthorities().size());
@@ -43,7 +43,7 @@ public class CustomJwtClaimsCustomizer implements OAuth2TokenCustomizer<JwtEncod
             customClaims.put("lastName", user.getLastName());
             customClaims.put("middleName", user.getMiddleName());
             customClaims.put("facilityCode", user.getFacilityCode());
-//           customClaims.put("roleIds", new);
+            customClaims.put("roleIds", user.getRoles().stream().map(r->r.getId().toString()).toList());
             customClaims.put("authorities", principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
             context.getClaims().claims(claims -> claims.putAll(customClaims));
         }

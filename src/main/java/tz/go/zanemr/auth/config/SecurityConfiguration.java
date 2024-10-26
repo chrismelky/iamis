@@ -89,6 +89,8 @@ public class SecurityConfiguration {
                         i -> i.userInfoMapper(userInfoMapper)
 
                 ).logoutEndpoint(l ->l.errorResponseHandler(((request, response, exception) -> {
+                    exception.printStackTrace();
+                    response.setHeader("cookie", null);
                     response.sendRedirect(webClientUrl);
                 }))));
 

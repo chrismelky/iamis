@@ -4,10 +4,10 @@ web-client-url: http://localhost:4200
 service-port: 8081
 
 #Database service configuration
-db-server: localhost
-db-port: 5432
+db-server: 102.223.7.208
+db-port: 5001
 db-name: zanemr_authorization
-db-username: postgres
+db-username: zanemr
 db-password: p@ssw0rd
 
 #Consul service Discovery configuration
@@ -35,7 +35,7 @@ spring:
       host: ${consul-server}
       port: ${consul-port}
       discovery:
-        prefer-ip-address: false
+        prefer-ip-address: true
         enabled: true
         register: true
   kafka:
