@@ -135,6 +135,9 @@ public class SecurityConfiguration {
                         .permitAll() // Allow CORS preflight
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("favicon.ico").permitAll()
+                        .requestMatchers("cover.png").permitAll()
+                        .requestMatchers("doctor.png").permitAll()
+                        .requestMatchers("smz.png").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
 
