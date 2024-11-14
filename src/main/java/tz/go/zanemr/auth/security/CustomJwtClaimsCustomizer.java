@@ -46,8 +46,8 @@ public class CustomJwtClaimsCustomizer implements OAuth2TokenCustomizer<JwtEncod
             customClaims.put("middleName", user.getMiddleName());
             customClaims.put("facilityCode", user.getFacilityCode());
             customClaims.put("roleIds", user.getRoles().stream().map(r->r.getId().toString()).toList());
-            customClaims.put("authorities", new ArrayList<>());
-//            customClaims.put("authorities", principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+//            customClaims.put("authorities", new ArrayList<>());
+            customClaims.put("authorities", principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
             context.getClaims().claims(claims -> claims.putAll(customClaims));
         }
     }
