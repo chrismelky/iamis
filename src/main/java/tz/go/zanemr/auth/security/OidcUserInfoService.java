@@ -2,6 +2,7 @@ package tz.go.zanemr.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import tz.go.zanemr.auth.modules.menu_group.MenuGroupDto;
 import tz.go.zanemr.auth.modules.menu_item.MenuItem;
 import tz.go.zanemr.auth.modules.menu_item.MenuItemRepository;
 import tz.go.zanemr.auth.modules.menu_item.MenuItemService;
+import tz.go.zanemr.auth.modules.role.Role;
 import tz.go.zanemr.auth.modules.user.User;
 import tz.go.zanemr.auth.modules.user.UserRepository;
 
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OidcUserInfoService   {
+public class OidcUserInfoService {
 
     private final UserRepository userRepository;
 
@@ -30,7 +32,7 @@ public class OidcUserInfoService   {
 
 
     public OidcUserInfo loadUser(String username) {
-        User user= userRepository.findUserByEmail(username)
+        User user = userRepository.findUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
         // Get user menus
@@ -44,11 +46,22 @@ public class OidcUserInfoService   {
                 .claim("lastName", user.getLastName())
                 .claim("passwordChanged", user.getPasswordChanged())
                 .claim("facilityName", user.getFacilityName())
-                .claim("facilityId", user.getFacilityId() != null ? user.getFacilityId().toString(): null)
+                .claim("facilityId", user.getFacilityId() != null ? user.getFacilityId().toString() : null)
                 .claim("facilityCode", user.getFacilityCode())
                 .claim("isActive", user.getIsActive())
                 .claim("menus", getMenus(user))
+                .claim("authorities", getAuthorities(user))
                 .build();
+    }
+
+    public List<String> getAuthorities(User user) {
+        List<String> authorities = new ArrayList<>();
+        for (Role role : user.getRoles()) {
+            role.getAuthorities()
+                    .forEach(authority ->
+                            authorities.add(authority.getName()));
+        }
+        return authorities;
     }
 
 
@@ -99,7 +112,7 @@ public class OidcUserInfoService   {
         return itemAsGroup;
     }
 
-    public  Map<String, List<Long>> getMenuGroup(Set<MenuItem> menuItems) {
+    public Map<String, List<Long>> getMenuGroup(Set<MenuItem> menuItems) {
 
         Map<String, List<Long>> groupItemIds = new HashMap<>();
         List<Long> menuGroupIds = new ArrayList<>();
@@ -119,7 +132,7 @@ public class OidcUserInfoService   {
         return groupItemIds;
     }
 
-    private  void getGroup(MenuGroup group, List<Long> collect) {
+    private void getGroup(MenuGroup group, List<Long> collect) {
         collect.add(group.getId());
     }
 
