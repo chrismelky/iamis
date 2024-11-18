@@ -41,14 +41,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tz.go.zanemr.auth.security.CustomUserDetailsService;
 import tz.go.zanemr.auth.security.OidcUserInfoService;
-import tz.go.zanemr.auth.security.authentication.Authorization;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -90,6 +88,7 @@ public class SecurityConfiguration {
 
                 ).logoutEndpoint(l ->l.errorResponseHandler(((request, response, exception) -> {
                     exception.printStackTrace();
+                    log.warn("**************** {} ",request.getRequestURI());
                     response.setHeader("cookie", null);
                     response.sendRedirect(webClientUrl);
                 }))));
@@ -193,6 +192,8 @@ public class SecurityConfiguration {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri(webClientUrl + "/auth-callback")
+                .redirectUri("http://localhost/auth-callback")
+                .redirectUri("http://102.223.7.208/auth-callback")
                 .postLogoutRedirectUri(webClientUrl)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
@@ -252,7 +253,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOrigin(webClientUrl);
+        config.addAllowedOrigin("*");
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
