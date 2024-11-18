@@ -89,7 +89,8 @@ public class SecurityConfiguration {
 
                 ).logoutEndpoint(l ->l.errorResponseHandler(((request, response, exception) -> {
                     exception.printStackTrace();
-                    log.warn("**************** {} ",request.getRequestURI());
+                    log.warn("**************** {} ",request.getRemoteHost());
+                    log.warn("**************** {} ",request.getPathInfo());
                     response.setHeader("cookie", null);
                     response.sendRedirect(webClientUrl);
                 }))));
@@ -195,6 +196,8 @@ public class SecurityConfiguration {
                 .redirectUri(webClientUrl + "/auth-callback")
                 .redirectUri("http://localhost/auth-callback")
                 .redirectUri("http://102.223.7.208/auth-callback")
+                .postLogoutRedirectUri("http://localhost")
+                .postLogoutRedirectUri("http://102.223.7.208")
                 .postLogoutRedirectUri(webClientUrl)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
