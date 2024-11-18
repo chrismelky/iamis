@@ -53,6 +53,7 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -253,7 +254,9 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOrigin("*");
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost",
+                "http://102.223.7.208"));
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
