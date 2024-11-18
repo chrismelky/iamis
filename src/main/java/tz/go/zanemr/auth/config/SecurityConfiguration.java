@@ -258,6 +258,7 @@ public class SecurityConfiguration {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
                 "http://localhost",
                 "http://102.223.7.208"));
         config.setAllowCredentials(true);
