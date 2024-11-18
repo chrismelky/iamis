@@ -196,8 +196,10 @@ public class SecurityConfiguration {
                 .redirectUri(webClientUrl + "/auth-callback")
                 .redirectUri("http://localhost/auth-callback")
                 .redirectUri("http://102.223.7.208/auth-callback")
+                .redirectUri("http://102.223.7.208:8888/auth-callback")
                 .postLogoutRedirectUri("http://localhost")
                 .postLogoutRedirectUri("http://102.223.7.208")
+                .postLogoutRedirectUri("http://102.223.7.208:8888")
                 .postLogoutRedirectUri(webClientUrl)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
@@ -260,7 +262,9 @@ public class SecurityConfiguration {
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:4200",
                 "http://localhost",
-                "http://102.223.7.208"));
+                "http://102.223.7.208",
+                "http://102.223.7.208:8888"
+        ));
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return source;
