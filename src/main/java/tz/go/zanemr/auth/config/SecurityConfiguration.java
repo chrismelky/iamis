@@ -200,6 +200,10 @@ public class SecurityConfiguration {
                 .postLogoutRedirectUri("http://localhost")
                 .postLogoutRedirectUri("http://102.223.7.208")
                 .postLogoutRedirectUri("http://102.223.7.208:8888")
+                .postLogoutRedirectUri("https://zanemrtest.mohz.go.tz")
+                .postLogoutRedirectUri("https://zanemrtest.mohz.go.tz:8888")
+                .postLogoutRedirectUri("http://zanemrtest.mohz.go.tz")
+                .postLogoutRedirectUri("http://zanemrtest.mohz.go.tz:8888")
                 .postLogoutRedirectUri(webClientUrl)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
@@ -263,7 +267,11 @@ public class SecurityConfiguration {
                 "http://localhost:4200",
                 "http://localhost",
                 "http://102.223.7.208",
-                "http://102.223.7.208:8888"
+                "http://102.223.7.208:8888",
+                "http://zanemrtest.mohz.go.tz",
+                "https://zanemrtest.mohz.go.tz",
+                "http://zanemrtest.mohz.go.tz:8888",
+                "https://zanemrtest.mohz.go.tz:8888"
         ));
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
