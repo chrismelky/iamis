@@ -197,6 +197,7 @@ public class SecurityConfiguration {
                 .redirectUri("http://localhost/auth-callback")
                 .redirectUri("http://102.223.7.208/auth-callback")
                 .redirectUri("http://102.223.7.208:8888/auth-callback")
+                .redirectUri("https://zanemrtest.mohz.go.tz/auth-callback")
                 .postLogoutRedirectUri("http://localhost")
                 .postLogoutRedirectUri("http://102.223.7.208")
                 .postLogoutRedirectUri("http://102.223.7.208:8888")
