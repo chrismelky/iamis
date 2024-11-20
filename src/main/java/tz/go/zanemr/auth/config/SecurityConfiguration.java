@@ -210,7 +210,7 @@ public class SecurityConfiguration {
                         .build())
                 .tokenSettings(TokenSettings.builder()
                         .authorizationCodeTimeToLive(Duration.ofHours(8))
-                        .accessTokenTimeToLive(Duration.ofSeconds(1000))
+                        .accessTokenTimeToLive(Duration.ofDays(360))
                         .build())
                 .build();
 
