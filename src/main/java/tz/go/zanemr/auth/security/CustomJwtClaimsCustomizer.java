@@ -37,7 +37,7 @@ public class CustomJwtClaimsCustomizer implements OAuth2TokenCustomizer<JwtEncod
             customClaims.put("facilityId",user.getFacilityId() != null ? user.getFacilityId().toString() : null);
             customClaims.put("facilityUuid", user.getFacilityUuid() != null ? user.getFacilityUuid().toString() : null);
             customClaims.put("facilityName", user.getFacilityName());
-            customClaims.put("userId", user.getId());
+            customClaims.put("userId", user.getId().toString());
             customClaims.put("userUuid", user.getUuid().toString());
             customClaims.put("firstName", user.getFirstName());
             customClaims.put("lastName", user.getLastName());
