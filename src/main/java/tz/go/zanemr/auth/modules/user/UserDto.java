@@ -33,7 +33,8 @@ public class UserDto extends BaseDto {
     private Boolean isActive = Boolean.TRUE;
     private Boolean passwordChanged = Boolean.FALSE;
     private List<UUID> roleIds = new ArrayList<>();
-    private UUID facilityId;
+    private Long facilityId;
+    private UUID facilityUuid;
     private Boolean isFacilityUser = Boolean.FALSE;
     private String facilityName;
     private String facilityCode;
@@ -44,7 +45,8 @@ public class UserDto extends BaseDto {
             String firstName,
             String middleName,
             String lastName,
-            UUID facilityId,
+             Long facilityId,
+            UUID facilityUuid,
             String facilityName,
             String facilityCode) {
 
@@ -54,6 +56,7 @@ public class UserDto extends BaseDto {
         this.middleName = middleName;
         this.lastName = lastName;
         this.facilityId = facilityId;
+        this.facilityUuid = facilityUuid;
         this.facilityName = facilityName;
         this.facilityCode = facilityCode;
     }

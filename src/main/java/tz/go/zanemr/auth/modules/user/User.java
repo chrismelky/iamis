@@ -50,7 +50,9 @@ public class User extends BaseModel {
 
     private Boolean isFacilityUser = Boolean.FALSE;
 
-    private UUID facilityId;
+    private Long facilityId;
+
+    private UUID facilityUuid;
 
     private String facilityName;
 

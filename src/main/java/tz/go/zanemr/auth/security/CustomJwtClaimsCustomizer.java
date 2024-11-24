@@ -3,20 +3,16 @@ package tz.go.zanemr.auth.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.stereotype.Component;
-import tz.go.zanemr.auth.core.BaseModel;
 import tz.go.zanemr.auth.modules.user.User;
-import tz.go.zanemr.auth.modules.user.UserDto;
 import tz.go.zanemr.auth.modules.user.UserMapper;
 import tz.go.zanemr.auth.modules.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 @Slf4j
@@ -38,7 +34,7 @@ public class CustomJwtClaimsCustomizer implements OAuth2TokenCustomizer<JwtEncod
 
             log.info(" user authorities : {}", principal.getAuthorities().size());
             Map<String, Object> customClaims = new HashMap<>();
-            customClaims.put("facilityId", user.getFacilityId() != null ? user.getFacilityId().toString() : null);
+            customClaims.put("facilityUuid", user.getFacilityUuid() != null ? user.getFacilityUuid().toString() : null);
             customClaims.put("facilityName", user.getFacilityName());
             customClaims.put("userId", user.getUuid().toString());
             customClaims.put("firstName", user.getFirstName());

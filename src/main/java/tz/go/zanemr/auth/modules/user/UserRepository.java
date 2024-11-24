@@ -18,6 +18,7 @@ public interface UserRepository extends BaseRepository<User, Long> {
             "u.middleName," +
             "u.lastName," +
             "u.facilityId," +
+            "u.facilityUuid," +
             "u.facilityName," +
             "u.facilityCode) from User u where u.email=:username")
     Optional<UserDto> findUserDtoByUsername(@Param("username") String username);

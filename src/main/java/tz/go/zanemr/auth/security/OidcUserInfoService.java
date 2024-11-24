@@ -2,11 +2,9 @@ package tz.go.zanemr.auth.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
-import tz.go.zanemr.auth.core.Utils;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroup;
 import tz.go.zanemr.auth.modules.menu_group.MenuGroupDto;
 import tz.go.zanemr.auth.modules.menu_item.MenuItem;
@@ -46,7 +44,8 @@ public class OidcUserInfoService {
                 .claim("lastName", user.getLastName())
                 .claim("passwordChanged", user.getPasswordChanged())
                 .claim("facilityName", user.getFacilityName())
-                .claim("facilityId", user.getFacilityId() != null ? user.getFacilityId().toString() : null)
+                .claim("facilityId", user.getFacilityId())
+                .claim("facilityUuid", user.getFacilityUuid() != null ? user.getFacilityUuid().toString() : null)
                 .claim("facilityCode", user.getFacilityCode())
                 .claim("isActive", user.getIsActive())
                 .claim("menus", getMenus(user))
