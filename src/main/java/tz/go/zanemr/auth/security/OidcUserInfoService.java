@@ -44,7 +44,7 @@ public class OidcUserInfoService {
                 .claim("lastName", user.getLastName())
                 .claim("passwordChanged", user.getPasswordChanged())
                 .claim("facilityName", user.getFacilityName())
-                .claim("facilityId", user.getFacilityId())
+                .claim("facilityId", user.getFacilityId().toString())
                 .claim("facilityUuid", user.getFacilityUuid() != null ? user.getFacilityUuid().toString() : null)
                 .claim("facilityCode", user.getFacilityCode())
                 .claim("isActive", user.getIsActive())
