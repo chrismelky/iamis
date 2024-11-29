@@ -17,6 +17,9 @@ consul-port: 8500
 kafka-server: 102.223.7.208
 kafka-port: 9092
 
+kafka-connect-server: 102.223.7.208
+kafka-connect-port: 8083
+
 spring:
   application:
     name: ${service-name}
