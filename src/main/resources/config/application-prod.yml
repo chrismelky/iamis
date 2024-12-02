@@ -83,7 +83,7 @@ logging:
 server:
   port: ${service-port}
   ssl:
-    enabled: true
+    enabled: false
     key-store: classpath:keystore.p12
     key-store-password: zanemr
     key-store-type: PKCS12
