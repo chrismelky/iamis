@@ -199,6 +199,7 @@ public class SecurityConfiguration {
                 .postLogoutRedirectUri("https://zanemrtest.mohz.go.tz")
                 .postLogoutRedirectUri("http://zanemrtest.mohz.go.tz")
                 .postLogoutRedirectUri("http://localhost:4200")
+                .postLogoutRedirectUri("https://localhost:4200")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .scope("offline_access")
@@ -259,6 +260,7 @@ public class SecurityConfiguration {
         config.addAllowedMethod("*");
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:4200",
+                "https://localhost:4200",
                 "http://zanemrtest.mohz.go.tz",
                 "https://zanemrtest.mohz.go.tz"
         ));
