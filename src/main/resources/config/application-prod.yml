@@ -25,9 +25,9 @@ spring:
     name: ${service-name}
 
   security:
-    oauth2:
-      authorizationserver:
-        issuer: http://102.223.7.208:8081/auth
+#    oauth2:
+#      authorizationserver:
+#        issuer: http://102.223.7.208:8081/auth
 
   flyway:
     sql-migration-prefix:
