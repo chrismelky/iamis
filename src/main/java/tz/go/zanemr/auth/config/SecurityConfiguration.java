@@ -135,10 +135,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll() // Allow CORS preflight
                         .requestMatchers("login").permitAll()
-                        .requestMatchers("**/favicon.ico").permitAll()
-                        .requestMatchers("**/cover.png").permitAll()
-                        .requestMatchers("**/doctor.png").permitAll()
-                        .requestMatchers("**/smz.png").permitAll()
+                        .requestMatchers("favicon.ico").permitAll()
+                        .requestMatchers("img/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
 
