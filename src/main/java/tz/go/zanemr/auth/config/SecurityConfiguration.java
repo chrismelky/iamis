@@ -134,11 +134,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll() // Allow CORS preflight
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("favicon.ico").permitAll()
-                        .requestMatchers("cover.png").permitAll()
-                        .requestMatchers("doctor.png").permitAll()
-                        .requestMatchers("smz.png").permitAll()
+                        .requestMatchers("login").permitAll()
+                        .requestMatchers("auth/favicon.ico").permitAll()
+                        .requestMatchers("auth/cover.png").permitAll()
+                        .requestMatchers("auth/doctor.png").permitAll()
+                        .requestMatchers("auth/smz.png").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
 
