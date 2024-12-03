@@ -27,7 +27,7 @@ spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: http://102.223.7.208:8081
+        issuer: http://102.223.7.208:8081/auth
 
   flyway:
     sql-migration-prefix:
@@ -82,9 +82,6 @@ logging:
 
 server:
   port: ${service-port}
-#  ssl:
-#    enabled: false
-#    key-store: classpath:keystore.p12
-#    key-store-password: zanemr
-#    key-store-type: PKCS12
-#    key-alias: zanemr
+  servlet:
+    context-path: /auth
+

@@ -4,7 +4,6 @@ service-name: auth
 #Super admin config
 admin-email: admin@zanemr.go.tz
 admin-password: password
-
 spring:
   application:
     name: ${service-name}
