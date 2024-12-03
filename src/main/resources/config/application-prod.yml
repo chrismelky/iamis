@@ -48,8 +48,6 @@ spring:
       host: ${consul-server}
       port: ${consul-port}
       discovery:
-        health-check-path: /oauth/actuator/health
-        health-check-interval: 10s
         prefer-ip-address: false
         enabled: true
         register: true
