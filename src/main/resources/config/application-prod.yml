@@ -48,6 +48,7 @@ spring:
       host: ${consul-server}
       port: ${consul-port}
       discovery:
+        healthCheckPath: ${management.server.servlet.context-path}/actuator/health
         prefer-ip-address: false
         enabled: true
         register: true
