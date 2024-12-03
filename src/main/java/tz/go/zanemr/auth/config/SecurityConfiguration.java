@@ -192,6 +192,7 @@ public class SecurityConfiguration {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri("http://localhost:4200/auth-callback")
+                .redirectUri("https://localhost:4200/auth-callback")
                 .redirectUri("http://102.223.7.208/auth-callback")
                 .redirectUri("http://zanemrtest.mohz.go.tz/auth-callback")
                 .redirectUri("https://zanemrtest.mohz.go.tz/auth-callback")
