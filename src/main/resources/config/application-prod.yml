@@ -84,6 +84,6 @@ logging:
 
 server:
   port: ${service-port}
-  servlet:
+#  servlet:
 #    context-path: /oauth
 
