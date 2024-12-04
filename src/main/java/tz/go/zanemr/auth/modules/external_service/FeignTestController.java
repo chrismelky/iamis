@@ -17,7 +17,7 @@ public class FeignTestController {
 
     private final ClientRegistrationFeignClient client;
 
-    @GetMapping("/facility/{uuid}")
+    @GetMapping("/facilities/{uuid}")
     @NoAuthorization
     public CustomApiResponse facility(@PathVariable UUID uuid) {
         return CustomApiResponse.ok(client.findFacilityByUuid(uuid).getData());
