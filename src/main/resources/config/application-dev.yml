@@ -1,3 +1,5 @@
+service-name: auth-dev
+
 #front end web client url
 web-client-url: http://localhost:4200
 #This service configuration
@@ -11,17 +13,19 @@ db-username: zanemr
 db-password: p@ssw0rd
 
 #Consul service Discovery configuration
-consul-server: localhost
+consul-server: 102.223.7.208
 consul-port: 8500
 
 #Kafka service configuration
-kafka-server: localhost
+kafka-server: 102.223.7.208
 kafka-port: 9092
 
-kafka-connect-server: localhost
+kafka-connect-server: 102.223.7.208
 kafka-connect-port: 8083
 
 spring:
+  application:
+    name: ${service-name}
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://${db-server}:${db-port}/${db-name}
