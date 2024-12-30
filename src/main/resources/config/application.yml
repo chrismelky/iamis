@@ -21,7 +21,8 @@ spring:
     openfeign:
       oauth2:
         enabled: true
-        clientRegistrationId: c204cb1e-1bcb-4615-a6f7-2021c33ff360
+      httpclient:
+        connection-timeout: 2000
   kafka:
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
