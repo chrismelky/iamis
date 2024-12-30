@@ -13,16 +13,16 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        log.info("Feign: Get user Authentication: {}", authentication);
-
-        if (authentication != null && authentication.getCredentials() != null) {
-            Jwt jwt = (Jwt) authentication.getCredentials();
-            String token = jwt.getTokenValue();
-            log.info("Request with token: {}", token);
-            requestTemplate.header("Authorization", "Bearer " + token);
-        }
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        Authentication authentication = context.getAuthentication();
+//        log.info("Feign: Get user Authentication: {}", authentication);
+//
+//        if (authentication != null && authentication.getCredentials() != null) {
+//            Jwt jwt = (Jwt) authentication.getCredentials();
+//            String token = jwt.getTokenValue();
+//            log.info("Request with token: {}", token);
+//            requestTemplate.header("Authorization", "Bearer " + token);
+//        }
 
     }
 }
