@@ -38,7 +38,7 @@ public class OidcUserInfoService {
                 .builder()
                 .subject(user.getEmail())
                 .email(user.getEmail())
-                .clam("uuid",user.getUuid().toString())
+                .claim("uuid",user.getUuid().toString())
                 .claim("email", user.getEmail())
                 .claim("firstName", user.getFirstName())
                 .claim("middleName", user.getLastName())
