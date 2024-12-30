@@ -10,7 +10,7 @@ import tz.go.zanemr.auth.core.CustomApiResponse;
 
 import java.util.UUID;
 
-@FeignClient(name = "client-registration", url = "http://102.223.7.208:8082", configuration = OAuthFeignConfig.class)
+@FeignClient(name = "client-registration", configuration = OAuthFeignConfig.class)
 public interface ClientRegistrationFeignClient {
 
     @GetMapping(AppConstants.API_PREFIX+"/facilities/{uuid}")
