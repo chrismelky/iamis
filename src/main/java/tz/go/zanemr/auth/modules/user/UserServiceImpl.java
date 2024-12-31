@@ -43,16 +43,16 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
                     .orElseThrow(
                             () -> new EntityNotFoundException("User with id " + dto.getUuid() + " not found"));
             user = userMapper.partialUpdate(dto, user);
-            user.setRoles(new HashSet<>());
-
         } else {
             user.setUuid(Utils.generateUuid());
             user.setPassword(passwordEncoder.encode(defaultPassword));
         }
-        for (UUID roleId : dto.getRoleIds()) {
-            user.addRole(roleRepository.getReferenceByUuid(roleId));
+        if(dto.getRoleIds() != null) {
+            user.setRoles(new HashSet<>());
+            for (UUID roleId : dto.getRoleIds()) {
+                user.addRole(roleRepository.getReferenceByUuid(roleId));
+            }
         }
-    //    user = setUserFacility(user, dto.getFacilityId());
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
