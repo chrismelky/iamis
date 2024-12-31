@@ -32,7 +32,7 @@ public class UserDto extends BaseDto {
     private String mobileNumber;
     private Boolean isActive = Boolean.TRUE;
     private Boolean passwordChanged = Boolean.FALSE;
-    private List<UUID> roleIds = new ArrayList<>();
+    private List<UUID> roleIds;
     private Long facilityId;
     private UUID facilityUuid;
     private Boolean isFacilityUser = Boolean.FALSE;
