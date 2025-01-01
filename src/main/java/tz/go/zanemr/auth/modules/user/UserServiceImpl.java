@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.stereotype.Service;
 import tz.go.zanemr.auth.core.CustomApiResponse;
 import tz.go.zanemr.auth.core.SearchService;
@@ -102,19 +105,20 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
     }
 
     @Override
-    public void changePassword(UUID uuid, UserDto userDto) {
-        User user = userRepository.findByUuid(uuid).orElseThrow(
-                () -> new EntityNotFoundException("User with UUID " + uuid + " not found")
-        );
+    public void changePassword(UserChangePasswordDto userChangePasswordDto, JwtEncodingContext context) {
 
-        if (!passwordEncoder.matches(userDto.getCurrentPassword(), user.getPassword())) {
+        Authentication principal = context.getPrincipal();
+        User user = userRepository.findUserByEmail(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
+
+        if (!passwordEncoder.matches(userChangePasswordDto.getCurrentPassword(), user.getPassword())) {
             throw new ValidationException("Current password is incorrect");
         }
 
-        if (!userDto.getNewPassword().equals(userDto.getConfirmPassword())) {
+        if (!userChangePasswordDto.getNewPassword().equals(userChangePasswordDto.getConfirmPassword())) {
             throw new ValidationException("New password and confirm password do not match");
         }
-        user.setPassword(passwordEncoder.encode(userDto.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword()));
 
 
         userRepository.save(user);

@@ -7,6 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import tz.go.zanemr.auth.core.AppConstants;
 import tz.go.zanemr.auth.core.CustomApiResponse;
+import tz.go.zanemr.auth.modules.user.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +22,7 @@ import java.util.UUID;
 public class UserResource {
 
    private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping()
     public CustomApiResponse create(@Valid @RequestBody UserDto userDto) {
@@ -55,20 +61,23 @@ public class UserResource {
         return CustomApiResponse.ok("User deleted successfully");
     }
 
-    @PutMapping("/{uuid}/change-password")
+    @PutMapping("/change-password")
     public CustomApiResponse changePassword(
-            @PathVariable("uuid") UUID uuid,
-            @Valid @RequestBody UserDto userDto) {
+            @Valid @RequestBody UserChangePasswordDto userChangePasswordDto,JwtEncodingContext context) {
 
-        if (userDto.getCurrentPassword() == null || userDto.getNewPassword() == null || userDto.getConfirmPassword() == null) {
+        Authentication principal = context.getPrincipal();
+        User user = userRepository.findUserByEmail(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
+
+        if (userChangePasswordDto.getCurrentPassword() == null || userChangePasswordDto.getNewPassword() == null || userChangePasswordDto.getConfirmPassword() == null) {
             throw new ValidationException("Current password, new password, and confirm password are required.");
         }
 
-        if (!userDto.getNewPassword().equals(userDto.getConfirmPassword())) {
+        if (!userChangePasswordDto.getNewPassword().equals(userChangePasswordDto.getConfirmPassword())) {
             throw new ValidationException("New password and confirm password do not match.");
         }
 
-        userService.changePassword(uuid, userDto);
+        userService.changePassword(userChangePasswordDto,context);
 
         return CustomApiResponse.ok("Password updated successfully");
     }
