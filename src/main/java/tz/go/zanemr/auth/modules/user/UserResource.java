@@ -60,7 +60,7 @@ public class UserResource {
         return CustomApiResponse.ok("User deleted successfully");
     }
 
-    @PutMapping("/change-password")
+    @PostMapping("/change-password")
     public CustomApiResponse changePassword(
             @Valid @RequestBody UserChangePasswordDto userChangePasswordDto) {
 
