@@ -100,4 +100,23 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
             throw new ValidationException("Cannot delete user with id " + uuid);
         }
     }
+
+    @Override
+    public void changePassword(UUID uuid, UserDto userDto) {
+        User user = userRepository.findByUuid(uuid).orElseThrow(
+                () -> new EntityNotFoundException("User with UUID " + uuid + " not found")
+        );
+
+        if (!passwordEncoder.matches(userDto.getCurrentPassword(), user.getPassword())) {
+            throw new ValidationException("Current password is incorrect");
+        }
+
+        if (!userDto.getNewPassword().equals(userDto.getConfirmPassword())) {
+            throw new ValidationException("New password and confirm password do not match");
+        }
+        user.setPassword(passwordEncoder.encode(userDto.getNewPassword()));
+
+
+        userRepository.save(user);
+    }
 }
