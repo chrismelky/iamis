@@ -7,11 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import tz.go.zanemr.auth.core.AppConstants;
 import tz.go.zanemr.auth.core.CustomApiResponse;
-import tz.go.zanemr.auth.modules.user.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 
 import java.util.Map;
 import java.util.UUID;

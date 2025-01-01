@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
@@ -105,10 +106,11 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
     @Override
     public void changePassword(UserChangePasswordDto userChangePasswordDto) {
 
-        CurrentUserDto userDto = currentUserService.getCurrentUser();
+//        CurrentUserDto userDto = currentUserService.getCurrentUser();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user = userRepository.findUserByEmail(userDto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + userDto.getEmail() + " not found"));
+        User user = userRepository.findUserByEmail(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " +authentication.getName() + " not found"));
 
         if (!passwordEncoder.matches(userChangePasswordDto.getCurrentPassword(), user.getPassword())) {
             throw new ValidationException("Current password is incorrect");
