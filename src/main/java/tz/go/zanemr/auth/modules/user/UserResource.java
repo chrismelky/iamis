@@ -23,6 +23,7 @@ public class UserResource {
 
    private final UserService userService;
     private final UserRepository userRepository;
+    private final JwtEncodingContext context;
 
     @PostMapping()
     public CustomApiResponse create(@Valid @RequestBody UserDto userDto) {
@@ -63,7 +64,7 @@ public class UserResource {
 
     @PutMapping("/change-password")
     public CustomApiResponse changePassword(
-            @Valid @RequestBody UserChangePasswordDto userChangePasswordDto,JwtEncodingContext context) {
+            @Valid @RequestBody UserChangePasswordDto userChangePasswordDto) {
 
         Authentication principal = context.getPrincipal();
         User user = userRepository.findUserByEmail(principal.getName())
@@ -77,7 +78,7 @@ public class UserResource {
             throw new ValidationException("New password and confirm password do not match.");
         }
 
-        userService.changePassword(userChangePasswordDto,context);
+        userService.changePassword(userChangePasswordDto);
 
         return CustomApiResponse.ok("Password updated successfully");
     }

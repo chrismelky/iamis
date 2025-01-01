@@ -33,6 +33,8 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
 
     private final UserMapper userMapper;
 
+    private final JwtEncodingContext context;
+
  //   private final ClientRegistrationFeignClient crFeignClient;
 
     @Value("${zanemr.default-password:password}")
@@ -105,7 +107,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
     }
 
     @Override
-    public void changePassword(UserChangePasswordDto userChangePasswordDto, JwtEncodingContext context) {
+    public void changePassword(UserChangePasswordDto userChangePasswordDto) {
 
         Authentication principal = context.getPrincipal();
         User user = userRepository.findUserByEmail(principal.getName())
