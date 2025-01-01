@@ -82,7 +82,5 @@ logging:
 
 server:
   port: ${service-port}
-#  servlet:
-#    context-path: /oauth
 
 web-client-url: https://zanemrtest.mohz.go.tz

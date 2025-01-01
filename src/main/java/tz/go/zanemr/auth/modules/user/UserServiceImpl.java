@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.stereotype.Service;
-import tz.go.zanemr.auth.core.CustomApiResponse;
-import tz.go.zanemr.auth.core.SearchService;
-import tz.go.zanemr.auth.core.Utils;
+import tz.go.zanemr.auth.core.*;
 import tz.go.zanemr.auth.modules.external_service.ClientRegistrationFeignClient;
 import tz.go.zanemr.auth.modules.role.RoleRepository;
 
@@ -33,9 +31,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
 
     private final UserMapper userMapper;
 
-    private final JwtEncodingContext context;
-
- //   private final ClientRegistrationFeignClient crFeignClient;
+    private final CurrentUserService currentUserService;
 
     @Value("${zanemr.default-password:password}")
     private String defaultPassword;
@@ -109,9 +105,10 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
     @Override
     public void changePassword(UserChangePasswordDto userChangePasswordDto) {
 
-        Authentication principal = context.getPrincipal();
-        User user = userRepository.findUserByEmail(principal.getName())
-                .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
+        CurrentUserDto userDto = currentUserService.getCurrentUser();
+
+        User user = userRepository.findUserByEmail(userDto.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + userDto.getEmail() + " not found"));
 
         if (!passwordEncoder.matches(userChangePasswordDto.getCurrentPassword(), user.getPassword())) {
             throw new ValidationException("Current password is incorrect");
@@ -121,7 +118,6 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
             throw new ValidationException("New password and confirm password do not match");
         }
         user.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword()));
-
 
         userRepository.save(user);
     }
