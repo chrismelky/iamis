@@ -54,4 +54,22 @@ public class UserResource {
         userService.delete(uuid);
         return CustomApiResponse.ok("User deleted successfully");
     }
+
+    @PutMapping("/{uuid}/change-password")
+    public CustomApiResponse changePassword(
+            @PathVariable("uuid") UUID uuid,
+            @Valid @RequestBody UserDto userDto) {
+
+        if (userDto.getCurrentPassword() == null || userDto.getNewPassword() == null || userDto.getConfirmPassword() == null) {
+            throw new ValidationException("Current password, new password, and confirm password are required.");
+        }
+
+        if (!userDto.getNewPassword().equals(userDto.getConfirmPassword())) {
+            throw new ValidationException("New password and confirm password do not match.");
+        }
+
+        userService.changePassword(uuid, userDto);
+
+        return CustomApiResponse.ok("Password updated successfully");
+    }
 }

@@ -39,6 +39,10 @@ public class UserDto extends BaseDto {
     private String facilityName;
     private String facilityCode;
 
+    private String currentPassword;
+    private String newPassword;
+    private String confirmPassword;
+
     public UserDto(
             Long id,
             UUID uuid,
