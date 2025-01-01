@@ -85,3 +85,4 @@ server:
 #  servlet:
 #    context-path: /oauth
 
+web-client-url: https://zanemrtest.mohz.go.tz
