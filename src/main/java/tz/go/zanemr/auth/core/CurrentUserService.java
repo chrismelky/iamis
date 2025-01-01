@@ -30,8 +30,7 @@ public class CurrentUserService {
         currentUserDto.setFacilityName(Objects.toString(details.get("facilityName")));
         currentUserDto.setFacilityCode(Objects.toString(details.get("facilityCode")));
 
-        String facilityId = Objects.toString(details.get("facilityId"));
-        currentUserDto.setFacilityId(facilityId != null ? Long.parseLong(facilityId) : null);
+        currentUserDto.setFacilityId(details.get("facilityId") != null ? Long.parseLong(Objects.toString(details.get("facilityId"))) : null);
         String userId = Objects.toString(details.get("userId"));
         currentUserDto.setId(userId != null ? Long.parseLong(userId) : null);
 
