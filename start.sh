@@ -28,10 +28,6 @@ fi
 if [[ "$2" == --with-data=* ]]; then
   PG_RESTORE=true
   DATA_FILE="${2#--with-data=}"
-  if [ ! -f "$DATA_FILE" ]; then
-    echo "Error: Data file '$DATA_FILE' not found!"
-    exit 1
-  fi
 fi
 
 echo "Starting with profile: $PROFILE"
