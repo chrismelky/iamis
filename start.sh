@@ -3,11 +3,12 @@
 # Define variables for profile, docker image name, and compose file
 APP_NAME="zanemr-auth-service"
 PROFILE=$1
+PG_RESTORE=false # Default to false
 IMAGE_NAME="$APP_NAME"
 
 # Function to display usage instructions
 usage() {
-  echo "Usage: $0 [dev|prod]"
+  echo "Usage: $0 [dev|prod] [--with-data]"
   exit 1
 }
 
@@ -20,6 +21,11 @@ fi
 if [ "$PROFILE" != "dev" ] && [ "$PROFILE" != "prod" ]; then
   echo "Error: Invalid profile specified!"
   usage
+fi
+
+# Check for the --with-data flag
+if [[ "$2" == "--with-data" ]]; then
+  PG_RESTORE=true
 fi
 
 echo "Starting with profile: $PROFILE"
@@ -42,7 +48,10 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Step 3: Start the Docker Compose stack with the appropriate profile
-echo "Starting Docker Compose with profile: $PROFILE"
-SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build -d
-
+if [ "$PG_RESTORE" == "true" ]; then
+  echo "Starting Docker Compose with profile: $PROFILE and PG_RESTORE=true"
+  SPRING_PROFILES_ACTIVE=$PROFILE PG_RESTORE=true docker compose up --build -d
+else
+  echo "Starting Docker Compose with profile: $PROFILE"
+  SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build -d
+fi

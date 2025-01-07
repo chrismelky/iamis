@@ -26,6 +26,7 @@ services:
       - .env
     environment:
       - PG_RESTORE=${PG_RESTORE:-false}
+      - DATA_FILE=${DATA_FILE}
     ports:
       - "5001:5432"
     volumes:
@@ -36,9 +37,9 @@ services:
       - zanemr
     command: >
       bash -c "
-        if [ \"$$PG_RESTORE\" = \"true\" ] && [ -f /backup/zanemr-auth.sql ]; then
-          echo 'Restoring database from backup...';
-          pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB /backup/zanemr-auth.sql || psql -U $$POSTGRES_USER -d $$POSTGRES_DB < /backup/zanemr-auth.sql;
+        if [ \"$$PG_RESTORE\" = \"true\" ] && [ -f \"$$DATA_FILE\" ]; then
+          echo 'Restoring database from backup file: $$DATA_FILE';
+          pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB \"$$DATA_FILE\" || psql -U $$POSTGRES_USER -d $$POSTGRES_DB < \"$$DATA_FILE\";
         fi;
         docker-entrypoint.sh postgres"
 
