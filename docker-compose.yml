@@ -43,7 +43,7 @@ services:
           echo 'Restoring database from backup file: $$DATA_FILE';
           pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB \"$$DATA_FILE\" || psql -U $$POSTGRES_USER -d $$POSTGRES_DB < \"$$DATA_FILE\";
         fi;
-        docker-entrypoint.sh postgres"
+        docker-entrypoint.sh postgres -c config_file=/etc/postgresql/postgresql.conf"
 
 volumes:
   pgdata:
