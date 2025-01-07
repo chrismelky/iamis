@@ -28,6 +28,7 @@ services:
     environment:
       - PG_RESTORE=${PG_RESTORE:-false}
       - DATA_FILE=${DATA_FILE}
+      - POSTGRES_INITDB_ARGS="--wal-level=logical"
     ports:
       - "5001:5432"
     volumes:
