@@ -20,7 +20,8 @@ services:
     command: ["java", "-jar", "app.jar"]
 
   zanemr-auth-service-db:
-    image: postgres:15-alpine
+    build:
+      context: ./postgres
     restart: always
     container_name: zanemr-auth-service-db
     env_file:
@@ -28,7 +29,6 @@ services:
     environment:
       - PG_RESTORE=${PG_RESTORE:-false}
       - DATA_FILE=${DATA_FILE}
-      - POSTGRES_INITDB_ARGS="--wal-level=logical"
     ports:
       - "5001:5432"
     volumes:
