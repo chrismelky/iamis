@@ -58,7 +58,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-if [ "$PG_RESTORE" == "true" ]; then
+if [ "$PG_RESTORE" == true ]; then
   echo "Starting Docker Compose with profile: $PROFILE and data restore from $DATA_FILE"
   SPRING_PROFILES_ACTIVE=$PROFILE PG_RESTORE=true DATA_FILE="$DATA_FILE" docker compose up --build
 else

@@ -39,7 +39,7 @@ services:
       - zanemr
     command: >
       bash -c "
-        if [ \"$$PG_RESTORE\" = \"true\" ] && [ -f \"$$DATA_FILE\" ]; then
+        if [ \"$$PG_RESTORE\" == true ]; then
           echo 'Restoring database from backup file: $$DATA_FILE';
           pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB \"$$DATA_FILE\" || psql -U $$POSTGRES_USER -d $$POSTGRES_DB < \"$$DATA_FILE\";
         fi;
