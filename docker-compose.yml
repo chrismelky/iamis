@@ -3,7 +3,8 @@ services:
     image: zanemr-auth-service
     restart: always
     build:
-      context: ./service
+      context: .
+      dockerfile: Dockerfile
     env_file:
       - .env
     environment:
