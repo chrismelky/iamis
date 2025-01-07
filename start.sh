@@ -4,6 +4,7 @@
 APP_NAME="zanemr-auth-service"
 PROFILE=$1
 PG_RESTORE=false # Default to false
+DATA_FILE=""      # Default to empty
 IMAGE_NAME="$APP_NAME"
 
 # Function to display usage instructions
@@ -24,8 +25,13 @@ if [ "$PROFILE" != "dev" ] && [ "$PROFILE" != "prod" ]; then
 fi
 
 # Check for the --with-data flag
-if [[ "$2" == "--with-data" ]]; then
+if [[ "$2" == --with-data=* ]]; then
   PG_RESTORE=true
+  DATA_FILE="${2#--with-data=}"
+  if [ ! -f "$DATA_FILE" ]; then
+    echo "Error: Data file '$DATA_FILE' not found!"
+    exit 1
+  fi
 fi
 
 echo "Starting with profile: $PROFILE"
@@ -49,8 +55,8 @@ if [ $? -ne 0 ]; then
 fi
 
 if [ "$PG_RESTORE" == "true" ]; then
-  echo "Starting Docker Compose with profile: $PROFILE and PG_RESTORE=true"
-  SPRING_PROFILES_ACTIVE=$PROFILE PG_RESTORE=true docker compose up --build -d
+  echo "Starting Docker Compose with profile: $PROFILE and data restore from $DATA_FILE"
+  SPRING_PROFILES_ACTIVE=$PROFILE PG_RESTORE=true DATA_FILE="$DATA_FILE" docker compose up --build -d
 else
   echo "Starting Docker Compose with profile: $PROFILE"
   SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build -d
