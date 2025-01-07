@@ -123,4 +123,14 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
 
         userRepository.save(user);
     }
+
+    @Override
+    public void resetPassword(UUID uuid,UserResetPasswordDto userResetPasswordDto){
+        User user = userRepository.findByUuid(uuid).orElseThrow(
+                () -> new EntityNotFoundException("User with UUID " + uuid + " not found")
+        );
+        user.setPassword(passwordEncoder.encode(userResetPasswordDto.getNewPassword()));
+        userRepository.save(user);
+    }
+
 }

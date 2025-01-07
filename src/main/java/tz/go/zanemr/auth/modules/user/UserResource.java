@@ -63,4 +63,15 @@ public class UserResource {
 
         return CustomApiResponse.ok("Password updated successfully");
     }
+
+    @PutMapping("/{uuid}/reset-password")
+    public CustomApiResponse resetPassword(
+            @PathVariable("uuid") UUID uuid,
+            @Valid @RequestBody UserResetPasswordDto userResetPasswordDto
+    ) {
+
+        userService.resetPassword(uuid,userResetPasswordDto);
+
+        return CustomApiResponse.ok("Password updated successfully");
+    }
 }
