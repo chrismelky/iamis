@@ -3,13 +3,11 @@
 # Define variables for profile, docker image name, and compose file
 APP_NAME="zanemr-auth-service"
 PROFILE=$1
-PG_RESTORE=false # Default to false
-DATA_FILE=""      # Default to empty
 IMAGE_NAME="$APP_NAME"
 
 # Function to display usage instructions
 usage() {
-  echo "Usage: $0 [dev|test|prod] [--with-data=/path/to/data/file.sql]"
+  echo "Usage: $0 [dev|test|prod]"
   exit 1
 }
 
@@ -22,12 +20,6 @@ fi
 if [ "$PROFILE" != "dev" ] && [ "$PROFILE" != "prod" ] && [ "$PROFILE" != "test" ]; then
   echo "Error: Invalid profile specified!"
   usage
-fi
-
-# Check for the --with-data flag
-if [[ "$2" == --with-data=* ]]; then
-  PG_RESTORE=true
-  DATA_FILE="${2#--with-data=}"
 fi
 
 echo "Starting with profile: $PROFILE"
