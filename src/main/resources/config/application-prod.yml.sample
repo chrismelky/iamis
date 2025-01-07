@@ -1,26 +1,23 @@
 #This service configuration
-service-name: authorization
+service-name: auth
 service-port: 8081
 
 #Database service configuration
-db-server: localhost
+db-server: zanemr-auth-service-db
 db-port: 5432
 db-name: zanemr_authorization
-db-username: postgres
-db-password: p@ssw0rd
+db-username:
+db-password:
 
 #Consul service Discovery configuration
-consul-server: localhost
+consul-server: 102.223.7.208
 consul-port: 8500
 
 #Kafka service configuration
-kafka-server: localhost
+kafka-server: 102.223.7.208
 kafka-port: 9092
 
-kafka-connect-server: localhost
-kafka-connect-port: 8083
-
-kafka-connect-server: localhost
+kafka-connect-server: 102.223.7.208
 kafka-connect-port: 8083
 
 spring:
@@ -30,7 +27,7 @@ spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: http://localhost:8081
+        issuer: http://102.223.7.208:8081
 
   flyway:
     sql-migration-prefix:
@@ -86,3 +83,4 @@ logging:
 server:
   port: ${service-port}
 
+web-client-url: https://zanemrtest.mohz.go.tz
