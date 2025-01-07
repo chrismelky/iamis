@@ -9,7 +9,7 @@ IMAGE_NAME="$APP_NAME"
 
 # Function to display usage instructions
 usage() {
-  echo "Usage: $0 [dev|prod] [--with-data=/path/to/data/file.sql]"
+  echo "Usage: $0 [dev|test|prod] [--with-data=/path/to/data/file.sql]"
   exit 1
 }
 
@@ -19,7 +19,7 @@ if [ -z "$PROFILE" ]; then
   usage
 fi
 
-if [ "$PROFILE" != "dev" ] && [ "$PROFILE" != "prod" ]; then
+if [ "$PROFILE" != "dev" ] && [ "$PROFILE" != "prod" ] && [ "$PROFILE" != "test" ]; then
   echo "Error: Invalid profile specified!"
   usage
 fi
@@ -31,6 +31,14 @@ if [[ "$2" == --with-data=* ]]; then
 fi
 
 echo "Starting with profile: $PROFILE"
+
+if [ "$PROFILE" == "prod" ]; then
+  cp service/banner_prod.png src/main/resources/static/img/banner.png
+fi
+if [ "$PROFILE" == "test" ]; then
+  cp service/banner_test.png src/main/resources/static/img/banner.png
+  PROFILE="prod"
+fi
 
 # Step 1: Build the application using Gradle
 echo "Running Gradle buildImage..."

@@ -196,8 +196,10 @@ public class SecurityConfiguration {
                 .redirectUri("http://102.223.7.208/auth-callback")
                 .redirectUri("http://zanemrtest.mohz.go.tz/auth-callback")
                 .redirectUri("https://zanemrtest.mohz.go.tz/auth-callback")
+                .redirectUri("https://zanemr.mohz.go.tz/auth-callback")
                 .postLogoutRedirectUri("http://102.223.7.208")
                 .postLogoutRedirectUri("https://zanemrtest.mohz.go.tz")
+                .postLogoutRedirectUri("https://zanemr.mohz.go.tz")
                 .postLogoutRedirectUri("http://zanemrtest.mohz.go.tz")
                 .postLogoutRedirectUri("http://localhost:4200")
                 .postLogoutRedirectUri("https://localhost:4200")
@@ -263,7 +265,8 @@ public class SecurityConfiguration {
                 "http://localhost:4200",
                 "https://localhost:4200",
                 "http://zanemrtest.mohz.go.tz",
-                "https://zanemrtest.mohz.go.tz"
+                "https://zanemrtest.mohz.go.tz",
+                "https://zanemr.mohz.go.tz"
         ));
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
