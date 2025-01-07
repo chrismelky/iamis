@@ -8,7 +8,7 @@ IMAGE_NAME="$APP_NAME"
 
 # Function to display usage instructions
 usage() {
-  echo "Usage: $0 [dev|prod] [--with-data]"
+  echo "Usage: $0 [dev|prod] [--with-data=/path/to/data/file.sql]"
   exit 1
 }
 
