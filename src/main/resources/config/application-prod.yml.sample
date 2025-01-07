@@ -6,8 +6,8 @@ service-port: 8081
 db-server: zanemr-auth-service-db
 db-port: 5432
 db-name: zanemr_authorization
-db-username:
-db-password:
+db-username:${POSTGRES_USER}
+db-password:${POSTGRES_PASSWORD}
 
 #Consul service Discovery configuration
 consul-server: 102.223.7.208

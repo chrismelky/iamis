@@ -1,7 +1,7 @@
 
 #Super admin config
 admin-email: admin@zanemr.go.tz
-admin-password: password
+admin-password: ${DEFAULT_ADMIN_PASSWORD:password}
 spring:
 
   flyway:
