@@ -3,7 +3,7 @@ services:
     image: zanemr-auth-service
     restart: always
     build:
-      context: .
+      context: ./service
       dockerfile: Dockerfile
     env_file:
       - .env
@@ -26,24 +26,14 @@ services:
     container_name: zanemr-auth-service-db
     env_file:
       - .env
-    environment:
-      - PG_RESTORE=${PG_RESTORE:-false}
-      - DATA_FILE=${DATA_FILE}
     ports:
       - "5001:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - /var/apps/zanemr/data:/backup
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - zanemr
-    command: >
-      bash -c "
-        if [ \"$$PG_RESTORE\" == true ]; then
-          echo 'Restoring database from backup file: $$DATA_FILE';
-          pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB \"$$DATA_FILE\" || psql -U $$POSTGRES_USER -d $$POSTGRES_DB < \"$$DATA_FILE\";
-        fi;
-        docker-entrypoint.sh postgres -c config_file=/etc/postgresql/postgresql.conf"
+    command:  "postgres -c config_file=/etc/postgresql/postgresql.conf"
 
 volumes:
   pgdata:
