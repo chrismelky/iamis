@@ -3,8 +3,8 @@ service-name: auth
 service-port: 8081
 
 #Database service configuration
-db-server: zanemr-auth-service-db
-db-port: 5432
+db-server: ${POSTGRES_DB}
+db-port: ${POSTGRES_PORT}
 db-name: zanemr_authorization
 db-username:${POSTGRES_USER}
 db-password:${POSTGRES_PASSWORD}
