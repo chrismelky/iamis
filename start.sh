@@ -43,7 +43,7 @@ fi
 
 # Step 2: Build the Docker image for the Spring Boot app
 echo "Building Docker image for profile: $PROFILE"
-docker build -t "$IMAGE_NAME" .
+docker build -t "$IMAGE_NAME" ./service
 
 if [ $? -ne 0 ]; then
   echo "Docker image build failed!"
