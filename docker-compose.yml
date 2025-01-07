@@ -22,17 +22,25 @@ services:
     image: postgres:15-alpine
     restart: always
     container_name: zanemr-auth-service-db
+    env_file:
+      - .env
     environment:
-      - POSTGRES_DB=zanemr_authorization
-      - POSTGRES_USER=zanemr
-      - POSTGRES_PASSWORD=p@ssw0rd
-      - POSTGRES_INITDB_ARGS = "--wal-level=logical"
+      - PG_RESTORE=${PG_RESTORE:-false}
     ports:
       - "5001:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - /var/apps/zanemr/data:/backup
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - zanemr
+    command: >
+      bash -c "
+        if [ \"$$PG_RESTORE\" = \"true\" ] && [ -f /backup/zanemr-auth.sql ]; then
+          echo 'Restoring database from backup...';
+          pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB /backup/zanemr-auth.sql || psql -U $$POSTGRES_USER -d $$POSTGRES_DB < /backup/zanemr-auth.sql;
+        fi;
+        docker-entrypoint.sh postgres"
 
 volumes:
   pgdata:
