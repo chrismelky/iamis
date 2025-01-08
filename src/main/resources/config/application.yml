@@ -3,6 +3,8 @@
 admin-email: admin@zanemr.go.tz
 admin-password: ${DEFAULT_ADMIN_PASSWORD:password}
 spring:
+  application:
+    name: ${service-name}
 
   flyway:
     sql-migration-prefix:
