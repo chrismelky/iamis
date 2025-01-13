@@ -17,8 +17,10 @@ import tz.go.zanemr.auth.modules.external_service.ClientRegistrationFeignClient;
 import tz.go.zanemr.auth.modules.role.RoleRepository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +133,15 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
         );
         user.setPassword(passwordEncoder.encode(userResetPasswordDto.getNewPassword()));
         userRepository.save(user);
+    }
+
+    @Override
+    public List<UserDto> searchByFullName(String fullname) {
+
+        List<User> users = userRepository.searchByFullName(fullname);
+        return users.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 }
