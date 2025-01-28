@@ -4,6 +4,7 @@
 APP_NAME="zanemr-auth-service"
 PROFILE=$1
 IMAGE_NAME="$APP_NAME"
+INTERACTIVE=false
 
 # Function to display usage instructions
 usage() {
@@ -50,5 +51,15 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Check for the interactive flag
+if [ "$2" == "-i" ]; then
+  INTERACTIVE=true
+fi
+
+# Step 3: Start the Docker Compose stack with the appropriate profile
 echo "Starting Docker Compose with profile: $PROFILE"
-SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build -d
+if [ "$INTERACTIVE" == true ]; then
+  SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build
+else
+  SPRING_PROFILES_ACTIVE=$PROFILE docker compose up --build -d
+fi
