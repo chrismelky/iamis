@@ -81,4 +81,10 @@ public class UserResource {
         List<UserDto> userDtos = userService.searchByFullName(fullName);
         return CustomApiResponse.ok("Search completed successfully", userDtos);
     }
+
+    @GetMapping("/count-user")
+    public CustomApiResponse getFacilityUser() {
+        long usercount = userService.countFacilityUser();
+        return CustomApiResponse.ok(usercount);
+    }
 }

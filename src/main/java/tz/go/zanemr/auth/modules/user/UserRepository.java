@@ -29,4 +29,7 @@ public interface UserRepository extends BaseRepository<User, Long> {
             "LOWER(CONCAT(u.firstName, ' ', u.middleName, ' ', u.lastName)) LIKE LOWER(CONCAT('%', :fullName, '%'))")
     List<User> searchByFullName(@Param("fullName") String fullName);
 
+    @Query("SELECT COUNT(u) FROM User u WHERE u.facilityId=:facilityId")
+    long countFacilityUser(@Param("facilityId") Long facilityId);
+
 }

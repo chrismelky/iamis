@@ -144,4 +144,20 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public long countFacilityUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByEmail(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " +authentication.getName() + " not found"));
+
+        if (user.getFacilityId() == null) {
+            return userRepository.count();
+        } else {
+
+            long facilityId = user.getFacilityId();
+            return userRepository.countFacilityUser(facilityId);
+        }
+    }
+
+
 }
