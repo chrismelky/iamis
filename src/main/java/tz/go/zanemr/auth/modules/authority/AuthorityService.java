@@ -23,6 +23,8 @@ public class AuthorityService {
     @KafkaListener(id = "authServer", topics = {"authority.create"})
     public void consume(Map<String, String> auth) {
 
+        log.info("******start consuming");
+
         if (!authorityRepository.existsByName(auth.get("name"))) {
             Authority authority = new Authority();
             authority.setName(auth.get("name"));
