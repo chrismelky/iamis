@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import tz.go.zanemr.auth.core.AppConstants;
 import tz.go.zanemr.auth.core.CustomApiResponse;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -73,5 +74,17 @@ public class UserResource {
         userService.resetPassword(uuid,userResetPasswordDto);
 
         return CustomApiResponse.ok("Password updated successfully");
+    }
+
+    @PutMapping("/search")
+    public CustomApiResponse searchByFullName(@RequestParam String fullName) {
+        List<UserDto> userDtos = userService.searchByFullName(fullName);
+        return CustomApiResponse.ok("Search completed successfully", userDtos);
+    }
+
+    @GetMapping("/count-user")
+    public CustomApiResponse getFacilityUser() {
+        long usercount = userService.countFacilityUser();
+        return CustomApiResponse.ok(usercount);
     }
 }
