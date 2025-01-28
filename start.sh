@@ -29,6 +29,7 @@ if [ "$PROFILE" == "prod" ]; then
   cp service/banner_prod.png src/main/resources/static/img/banner.png
 fi
 if [ "$PROFILE" == "test" ]; then
+    echo "************* Copy image for test******** "
   cp service/banner_test.png src/main/resources/static/img/banner.png
   PROFILE="prod"
 fi
