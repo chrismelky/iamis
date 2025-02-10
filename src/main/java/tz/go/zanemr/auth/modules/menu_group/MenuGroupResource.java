@@ -19,7 +19,7 @@ public class MenuGroupResource {
     private final MenuGroupService menuGroupService;
 
     @GetMapping
-    public CustomApiResponse get(Pageable pageable, Map<String, Object> searchParams) {
+    public CustomApiResponse get(Pageable pageable,@RequestParam Map<String, Object> searchParams) {
         return CustomApiResponse.ok(menuGroupService.findAll(pageable, searchParams));
     }
 

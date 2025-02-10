@@ -30,7 +30,6 @@ public final class MenuGroupDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<MenuItemDto> children;
 
-
     public MenuGroupDto(Long id, UUID uuid, @NotNull String name, @NotNull String name1, @NotNull String state, String icon, @NotNull Integer sortOrder) {
         this.id = id;
         this.uuid = uuid;
