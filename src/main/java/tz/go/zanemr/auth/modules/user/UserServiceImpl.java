@@ -122,7 +122,7 @@ public class UserServiceImpl extends SearchService<User> implements UserService 
             throw new ValidationException("New password and confirm password do not match");
         }
         user.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword()));
-
+        user.setPasswordChanged(true);
         userRepository.save(user);
     }
 
