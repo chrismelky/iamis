@@ -1,6 +1,6 @@
 services:
-  zanemr-auth-service:
-    image: zanemr-auth-service
+  iamis-api:
+    image: iamis-api
     restart: always
     build:
       context: .
@@ -16,28 +16,28 @@ services:
     networks:
       - zanemr
     depends_on:
-      - zanemr-auth-service-db
-    command: ["java", "-jar", "app.jar"]
+      - iamis-db
+    command: [ "java", "-jar", "app.jar" ]
 
-  zanemr-auth-service-db:
+  iamis-db:
     build:
       context: ./postgres
     restart: always
-    container_name: zanemr-auth-service-db
+    container_name: iamis-db
     env_file:
       - .env
     ports:
-      - "5001:5432"
+      - "6000:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - /var/apps/zanemr/data:/backup
+      - /var/apps/iamis/data:/backup
     networks:
       - zanemr
-    command:  "postgres -c config_file=/etc/postgresql/postgresql.conf"
+    command: "postgres -c config_file=/etc/postgresql/postgresql.conf"
 
 volumes:
   pgdata:
 
 networks:
-  zanemr:
+  iamis:
     external: true

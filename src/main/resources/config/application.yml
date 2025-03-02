@@ -1,6 +1,6 @@
 
 #Super admin config
-admin-email: admin@zanemr.go.tz
+admin-email: admin@iamis.co.tz
 admin-password: ${DEFAULT_ADMIN_PASSWORD:password}
 spring:
   application:
@@ -12,27 +12,6 @@ spring:
     out-of-order: true
     validate-on-migrate: true
 
-  cloud:
-    refresh:
-      enabled: false
-    consul:
-      discovery:
-        prefer-ip-address: true
-        enabled: true
-        register: true
-    openfeign:
-      oauth2:
-        enabled: true
-      httpclient:
-        connection-timeout: 2000
-  kafka:
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    consumer:
-      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
-      auto-offset-reset: earliest
-    admin:
-      fail-fast: true
   task:
     execution:
       thread-name-prefix: ${service-name}-task

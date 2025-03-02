@@ -1,4 +1,4 @@
-service-name: auth-dev
+service-name: iamis-api
 
 #front end web client url
 web-client-url: http://localhost:4200
@@ -6,22 +6,11 @@ web-client-url: http://localhost:4200
 service-port: 8081
 
 #Database service configuration
-db-server: 102.223.7.208
-db-port: 5001
-db-name: zanemr_authorization
-db-username: zanemr
+db-server: localhost
+db-port: 6000
+db-name: iamis-dev
+db-username: iamis
 db-password: p@ssw0rd
-
-#Consul service Discovery configuration
-consul-server: 102.223.7.208
-consul-port: 8500
-
-#Kafka service configuration
-kafka-server: 102.223.7.208
-kafka-port: 9092
-
-kafka-connect-server: 102.223.7.208
-kafka-connect-port: 8083
 
 spring:
   application:
@@ -32,18 +21,6 @@ spring:
     username: ${db-username}
     password: ${db-password}
 
-  cloud:
-    refresh:
-      enabled: false
-    consul:
-      host: ${consul-server}
-      port: ${consul-port}
-      discovery:
-        prefer-ip-address: true
-        enabled: true
-        register: true
-  kafka:
-    bootstrap-servers: ${kafka-server}:${kafka-port}
   task:
     execution:
       thread-name-prefix: ${service-name}-task

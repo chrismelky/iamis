@@ -1,1 +1,0 @@
-ALTER TABLE users ADD COLUMN is_facility_user BOOLEAN DEFAULT false;

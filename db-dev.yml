@@ -1,0 +1,23 @@
+services:
+  iamis-db-dev:
+    build:
+      context: ./postgres
+    restart: always
+    container_name: iamis-db-dev
+    env_file:
+      - .env
+    ports:
+      - "6000:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - /var/apps/iamis/data:/backup
+    networks:
+      - iamis
+    command: "postgres -c config_file=/etc/postgresql/postgresql.conf"
+
+volumes:
+  pgdata:
+
+networks:
+  iamis:
+    external: true
