@@ -28,8 +28,6 @@ public class Authority extends BaseModel {
     @NotNull
     private String name;
 
-    private String service;
-
     private String resource;
 
     private String action;

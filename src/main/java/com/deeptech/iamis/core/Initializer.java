@@ -43,9 +43,6 @@ public class Initializer implements ApplicationRunner {
 
     private final MenuItemRepository menuItemRepository;
 
-    @Value("${service-name:auth}")
-    private String serviceName;
-
     @Value("${admin-email}")
     private String adminEmail;
 
@@ -89,7 +86,6 @@ public class Initializer implements ApplicationRunner {
                                         if (!authorityRepository.existsByResourceAndAction(resourceName, actionName)) {
                                             Authority authority = new Authority();
                                             authority.setName(authName);
-                                            authority.setService(serviceName);
                                             authority.setAction(actionName);
                                             authority.setResource(resourceName);
                                             authority.setMethod(methodName);
@@ -108,7 +104,7 @@ public class Initializer implements ApplicationRunner {
     private Role initializeRole() {
         Optional<Role> roleOptional = roleRepository.findRoleByCode("SUPER_ADMINISTRATOR");
         if (roleOptional.isEmpty()) {
-            Set<Authority> authorities = new HashSet<>(authorityRepository.findByService(serviceName));
+            Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
             Role role = new Role();
             role.setName("SUPER ADMINISTRATOR");
             role.setCode(String.join("_", role.getName().split(" ")));

@@ -44,3 +44,9 @@ logging:
 server:
   port: ${service-port}
 
+security:
+  authentication:
+    jwt:
+      base64-secret: ZWZmMDBjYjgxZGM5ZGI3ZDM1YzE3NDdiMDlkMmZjN2RhYjNjODU5Y2NjMjkyNGUxZmNhODk1YmVmZGRlMzQyYmVkMTJhMWJhMzg2YzYyZDZjNTAyYmM5NmNjM2EyNmJjM2RlMDUzNDk0YTdkYjM4M2U1MzAwNjY2MjkwZTllYjY=
+      token-validity-in-seconds: 600
+      token-validity-in-seconds-for-remember-me: 3600

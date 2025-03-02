@@ -13,10 +13,8 @@ public interface AuthorityRepository extends BaseRepository<Authority, Long> {
 
     boolean existsByResourceAndAction(String resourceName, String actionName);
 
-    Set<Authority> findByService(String serviceName);
-
     Set<Authority> findAllByResourceAndAction(String role, String create);
 
-    @Query("Select a from Authority a order by a.service, a.resource, a.method")
+    @Query("Select a from Authority a order by a.resource, a.method")
     List<Authority> findAll();
 }
