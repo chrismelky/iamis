@@ -1,4 +1,4 @@
-package com.deeptech.iamis.modules.category_of_finding;
+package com.deeptech.iamis.modules.finding_subcategory;
 
 import com.deeptech.iamis.core.BaseDto;
 import jakarta.validation.constraints.NotNull;
@@ -9,15 +9,15 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Data Transfer Object (DTO) for the {@link CategoryOfFinding} entity.
- * This class is used to transfer CategoryOfFinding data between the client and server.
+ * Data Transfer Object (DTO) for the {@link FindingSubcategory} entity.
+ * This class is used to transfer FindingSubcategory data between the client and server.
  * It extends {@link BaseDto}, which provides common fields like id, uuid.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CategoryOfFindingDto extends BaseDto {
+public class FindingSubcategoryDto extends BaseDto {
 
   @NotNull
   @Size(max = 100)
@@ -26,4 +26,9 @@ public class CategoryOfFindingDto extends BaseDto {
   @NotNull
   @Size(max = 10)
   private String code;
+
+  @NotNull
+  private Long findingCategoryId;
+
+  private String findingCategoryName;
 }

@@ -1,9 +1,9 @@
-package com.deeptech.iamis.modules.category_of_finding;
+package com.deeptech.iamis.modules.finding_subcategory;
 
 import org.mapstruct.*;
 
 /**
- * Mapper interface for converting between {@link CategoryOfFinding} entities and {@link CategoryOfFindingDto} objects.
+ * Mapper interface for converting between {@link FindingSubcategory} entities and {@link FindingSubcategoryDto} objects.
  * This interface uses MapStruct to automatically generate the mapping code at compile time.
  * It defines methods for full entity-to-DTO conversion, partial updates, and custom mappings.
  *<p>
@@ -13,16 +13,16 @@ import org.mapstruct.*;
   unmappedTargetPolicy = ReportingPolicy.IGNORE,
   componentModel = MappingConstants.ComponentModel.SPRING
 )
-public interface CategoryOfFindingMapper {
-  CategoryOfFinding toEntity(CategoryOfFindingDto categoryOfFindingDto);
+public interface FindingSubcategoryMapper {
+  FindingSubcategory toEntity(FindingSubcategoryDto findingSubcategoryDto);
 
-  CategoryOfFindingDto toDto(CategoryOfFinding categoryOfFinding);
+  FindingSubcategoryDto toDto(FindingSubcategory findingSubcategory);
 
   @BeanMapping(
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
   )
-  CategoryOfFinding partialUpdate(
-    CategoryOfFindingDto categoryOfFindingDto,
-    @MappingTarget CategoryOfFinding categoryOfFinding
+  FindingSubcategory partialUpdate(
+    FindingSubcategoryDto findingSubcategoryDto,
+    @MappingTarget FindingSubcategory findingSubcategory
   );
 }

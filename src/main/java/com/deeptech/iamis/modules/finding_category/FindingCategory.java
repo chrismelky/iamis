@@ -1,4 +1,4 @@
-package com.deeptech.iamis.modules.category_of_finding;
+package com.deeptech.iamis.modules.finding_category;
 
 import com.deeptech.iamis.core.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Entity representing a CategoryOfFinding in the system.
- * This class maps to the 'category_of_findings' table in the database.
+ * Entity representing a FindingCategory in the system.
+ * This class maps to the 'finding_categories' table in the database.
  * Inherits from {@link BaseModel}, which includes common auditing fields like 'id', uuid, 'createdAt', createdBy etc.
  */
 @Getter
@@ -20,8 +20,8 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "category_of_findings")
-public class CategoryOfFinding extends BaseModel {
+@Table(name = "finding_categories")
+public class FindingCategory extends BaseModel {
 
   @NotNull
   @Size(max = 100)
