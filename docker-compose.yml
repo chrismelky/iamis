@@ -32,7 +32,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - /var/apps/iamis/data:/backup
     networks:
-      - zanemr
+      - iamis
     command: "postgres -c config_file=/etc/postgresql/postgresql.conf"
 
 volumes:
